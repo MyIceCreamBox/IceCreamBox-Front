@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
 
-const Button = ({title, onPress, buttonStyle}) => {
+const Button = ({title, onPress, buttonStyle, disabled}) => {
 
     Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf')});
     
@@ -16,6 +16,7 @@ const Button = ({title, onPress, buttonStyle}) => {
                 buttonStyle,
             ]}
             onPressOut={onPress}
+            disabled={disabled}
             >
                 <Text style={styles.title}>{title}</Text>
         </Pressable>
@@ -26,6 +27,7 @@ Button.proptypes = {
     title: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
     buttonStyle: PropTypes.object,
+    disabled:PropTypes.bool
 };
 
 const styles = StyleSheet.create({

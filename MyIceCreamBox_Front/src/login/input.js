@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, Platform, TextInput} from "react-native";
-import { useEffect, useState} from 'react';
+import { forwardRef, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
 
@@ -13,51 +13,63 @@ export const ReturnKeyTypes = {
     NEXT: 'next'
 }
 
-// Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf'),});
+
+const Input = forwardRef(
+    (
+        {title, onChangeText, maxLength ,keyboardType, returnKeyType, secureTextEntry, value, onSubmitEditing, disabled}, 
+        ref ) => {
+            const [fontsLoaded, setFontsLoaded] = useState(false);
+
+            useEffect(() => {
+                loadFonts();
+            }, []);
+
+            async function loadFonts() {
+                await Font.loadAsync({
+                locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
+                });
+                setFontsLoaded(true);
+            }
+
+            if (!fontsLoaded) {
+                return null;
+            }
+        
+            return (
+                <View 
+                    behavior={Platform.select({ios:'padding'})}
+                    style={styles.container}>
+                    <Text style={styles.text}>{title}</Text>
+                    <TextInput
+                        style={styles.inputText}
+                        autoCapitalize="none"
+                        autoCorrect={false}
+                        maxLength={maxLength}
+                        keyboardType={keyboardType}
+                        returnKeyType={returnKeyType}
+                        secureTextEntry={secureTextEntry}
+                        onChangeText={onChangeText}
+                        onSubmitEditing={onSubmitEditing}
+                        disabled={disabled}
+                        value={value}
+                        ref={ref}
+                        />
+                </View>
+            );
+        }
+);
+
+Input.displayName="Input";
 
 
-const Input = ({title, maxLength ,keyboardType, returnKeyType, secureTextEntry, ref, value}) => {
-    
-    const [fontsLoaded, setFontsLoaded] = useState(false);
-
-    useEffect(() => {
-        loadFonts();
-    }, []);
-
-    async function loadFonts() {
-        await Font.loadAsync({
-        locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
-        });
-        setFontsLoaded(true);
-    }
-
-    if (!fontsLoaded) {
-        return null;
-    }
-    
-    return (
-        <View 
-            behavior={Platform.select({ios:'padding'})}
-            style={styles.container}>
-            <Text style={styles.text}>{title}</Text>
-            <TextInput
-                style={styles.inputText}
-                autoCapitalize="none"
-                autoCorrect={false}
-                maxLength={maxLength}
-                keyboardType={keyboardType}
-                returnKeyType={returnKeyType}
-                secureTextEntry={secureTextEntry}
-                ref={ref}
-                onChangeText={useState}
-                />
-        </View>
-    );
-};
 
 Input.defaultProps = {
     keyboardType: KeyboardTypes.DEFAULT,
     returnKeyType: ReturnKeyTypes.DONE
+};
+
+Input.propTypes = {
+    disabled: PropTypes.bool
 };
 
 const styles = StyleSheet.create(
@@ -82,7 +94,6 @@ const styles = StyleSheet.create(
             borderRadius: 20,
             borderWidth: 2,
             height: '54%',
-            marginBottom: '10%'
         }
     }
 );

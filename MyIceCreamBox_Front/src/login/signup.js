@@ -1,10 +1,11 @@
 import Button from "../component/Button";
 import DoubleCheckBtn from "./doubleCheck_btn";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,Text,View, Keyboard,KeyboardAvoidingView, Platform, Pressable, ScrollView } from "react-native";
+import { StyleSheet,Text,View, Keyboard, Pressable } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Input, { KeyboardTypes, ReturnKeyTypes } from "./input";
 import * as Font from "expo-font";
-import { useState, createRef, useEffect} from "react";
+import { useState, useEffect, useRef} from "react";
 import {width, height } from '../global/dimension';
 import { useNavigation } from '@react-navigation/native';
 
@@ -12,37 +13,35 @@ const SignUp = () => {
 
     const navigation = useNavigation();
 
-    //아이디, 비밀번호, 비밀번호 확인,닉네임 저장할 상태 변수
+    //아이디, 비밀번호, 비밀번호 확인, 닉네임, 에러 메세지 저장할 상태 변수
     const [email, setEmail] = useState('');
     const [pw, setPW] = useState('');
     const [checkPW, setCheckPW]= useState('');
     const [name, setName] = useState('');
+    const [errorMessage, setErrorMessage] = useState('');
 
-    const emailInputRef = createRef();
-    const pwInputRef = createRef();
-    const checkPWInputRef = createRef();
-    const nameInputRef = createRef();
+    const emailRef = useRef();
+    const pwRef = useRef();
+    const confirmPWRef = useRef();
 
-    // 로그인 버튼 Press => Login 컴포넌트
-    // const onPress = () => navigation.navigate('Login');
+    //email, 비밀번호, 비밀번호 확인, 닉네임 입력이 없고 에러메세지가 존재하는 경우 => 회원가입 비활성화
+    const [disabled, setDisabled] = useState(true);
 
-    // 확인 버튼 Press
-    // const onSubmit = () => {
-    //     navigation.navigate('Login');
-    //     Keyboard.dismiss();
-    //     Alert.alert({email},{pw},{name});
-    // }
-
-    // 중복 확인 버튼 Press
-    // const onDoubleCheck = () => {
-    //     if({pw}=={checkPW}) 
-    // }
+    useEffect(()=>{
+        let errMsg='';
+        if (pw !== checkPW) {
+            errMsg = '*비밀번호가 일치하지 않습니다.';
+        }else{errMsg='';}
+        setErrorMessage(errMsg);
+    }, [pw,checkPW]);
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
 
-    useEffect(() => {
-        loadFonts();
-    }, []);
+    useEffect(()=>{
+        setDisabled(!(email && pw && checkPW && name && !errorMessage));
+    }, [email,pw,checkPW,name,errorMessage]);
+
+    useEffect(() => {loadFonts();}, []);
 
     async function loadFonts() {
         await Font.loadAsync({
@@ -56,19 +55,11 @@ const SignUp = () => {
     }
 
     return(
-        
-        <KeyboardAvoidingView 
-            behavior={Platform.select({ios:'padding'})}
-            style={styles.container}
-        > 
-            <ScrollView >
+        <KeyboardAwareScrollView contentContainerStyle={{flex:1}}> 
             <Pressable style={styles.container} onPress={()=>Keyboard.dismiss()}>
                 <StatusBar style="auto"/>
                 <View style={styles.header}>
-                    <Text
-                        style={[styles.basicText,styles.title]}>
-                        회원가입
-                    </Text>
+                    <Text style={[styles.basicText,styles.title]}>회원가입</Text>
                 </View>
 
                 <View style={{top:'14.19%'}}>
@@ -79,52 +70,49 @@ const SignUp = () => {
                                 keyboardType={KeyboardTypes.EMAIL}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 value={email}
-                                onChangeText={(email)=>{setEmail(email.trim())}}
-                                ref={emailInputRef}
+                                onChangeText={text=>setEmail(text)}
+                                onSubmitEditing={()=>{
+                                    setEmail(email);
+                                    emailRef.current.focus();
+                                }}
                                 />
                         </View>
                         <View>
                             <Input 
+                                ref={emailRef}
                                 title={"비밀번호"}
                                 keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 secureTextEntry
                                 value={pw}
-                                onChangeText={(pw)=>{setPW(pw.trim())}}
-                                ref={pwInputRef}
+                                onChangeText={text=>setPW(text)}
+                                onSubmitEditing={()=>{pwRef.current.focus();}}
                                 />
                         </View>
                         <View>
                             <Input 
+                                ref={pwRef}
                                 title={"비밀번호 확인"}
                                 keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 secureTextEntry
                                 value={checkPW}
-                                onChangeText={
-                                    (checkPW)=>{setCheckPW(checkPW.trim())}
-                                }
-                                ref={checkPWInputRef}
-
+                                onChangeText={text=>setCheckPW(text)}
+                                onSubmitEditing={()=>{confirmPWRef.current.focus();}}
                             />
-                                  <View style={styles.errorText}>
-                                    {pw !== checkPW ? (
-                                        <Text style={styles.errorText}>
-                                            *비밀번호가 일치하지 않습니다.
-                                        </Text>
-                                    ):
-                                    <Text style={styles.errorText}>비밀번호가 일치합니다</Text>}
-                                </View>
+                            <View style={styles.checkPassword}>
+                                <Text style={styles.errorText}>{errorMessage}</Text>
+                            </View>
                         </View>
                         <View>
                             <Input 
+                                ref={confirmPWRef}
                                 title={"닉네임"}
                                 keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.DONE}
                                 value={name}
                                 maxLength={15}
-                                onChangeText={(name)=>{setName(name.trim())}}
-                                ref={nameInputRef}
+                                onChangeText={text=>setName(text)}
                                 />
                         </View>
                     </View>
@@ -135,26 +123,23 @@ const SignUp = () => {
                         <DoubleCheckBtn  
                             color='#FF6969'
                             buttonStyle={[
-                                {width: width*0.3 ,
-                                height: height*0.04,
-                                marginBottom: '18%'}]}
+                                {width: width*0.3, height: height*0.04,marginBottom: '18%',top:'5%'}]}
                             title='중복 확인'
-                            onPress={() => navigation.navigate('Login')}/>
+                            onPress={() => {}}
+                            disabled={disabled}/>
                     </View>
                     <View style={styles.submit}>
                         <Button
                             color='rgba(255, 232, 143, 1)'
                             buttonStyle={[
-                                {width: width*0.6 ,
-                                height: height*0.06,
-                                margin:'0%'}]}
+                                {width: width*0.6 ,height: height*0.06, margin:'0%'}]}
                             title='확인'
-                            onPress={() => navigation.navigate('Login')}/>       
+                            onPress={() => navigation.navigate('Login')}
+                            disabled={disabled}/>       
                     </View>              
                 </View>
             </Pressable>
-            </ScrollView>
-        </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
     );
 };
 
@@ -194,13 +179,15 @@ const styles = StyleSheet.create({
         height: '60%'
     },
     errorText:{
-        marginRight: '4%',
         fontFamily: 'locus_sangsang',
         fontStyle: 'normal',
         color: '#FF6969',
-        textAlign: 'center',
-        backgroundColor:'black',
+        textAlign: 'right',
         fontSize: 10
+    },
+    checkPassword:{
+        bottom:'20%',
+        justifyContent: 'flex-end',
     },
     footer:{
         top:'54.8%', 
