@@ -21,7 +21,7 @@ import ButtonIceCheck from './buttons/iceCheckButton';
 import { height } from '../global/dimension';
 
 const LoggedInMainpage = () => {
-  // const navigation = useNavigation();
+  const navigation = useNavigation();
 
   return (
     <View style={styles.container}>
@@ -48,7 +48,7 @@ const LoggedInMainpage = () => {
             <Ellipse />
             <ButtonIceCheck
               title="내 아이스크림 확인"
-              // onPress={() => navigation.navigate('MyPage')}
+              onPress={() => navigation.navigate('MyPage')}
             />
           </View>
           <View style={styles.bottom}>
