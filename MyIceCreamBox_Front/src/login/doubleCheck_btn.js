@@ -2,8 +2,9 @@ import { Pressable, Text, StyleSheet} from "react-native";
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
+import { showToast } from "../component/Toast";
 
-const DoubleCheckBtn = ({title, onPress, buttonStyle}) => {
+const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -31,7 +32,9 @@ const DoubleCheckBtn = ({title, onPress, buttonStyle}) => {
                 pressed && {backgroundColor:'#FF6969'},
                 buttonStyle,
             ]}
+            onPress={showToast}
             onPressOut={onPress}
+            disabled={disabled}
             >
             <Text style={styles.title}>{title}</Text>
         </Pressable>
@@ -42,6 +45,7 @@ DoubleCheckBtn.proptypes = {
     title: PropTypes.string.isRequired,
     onPress: PropTypes.func.isRequired,
     buttonStyle: PropTypes.object,
+    disabled: PropTypes.bool
 };
 
 const styles = StyleSheet.create({

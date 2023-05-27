@@ -2,8 +2,9 @@ import Button from '../component/Button';
 import SignUpButton from './signup_btn';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Image, View, KeyboardAvoidingView, Keyboard, Platform, Pressable,} from 'react-native';
-import {useEffect, useState} from 'react';
+import { StyleSheet, Image, View, Keyboard, Pressable,} from 'react-native';
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import {useEffect, useState, useRef} from 'react';
 import Input, { KeyboardTypes, ReturnKeyTypes } from './input';
 import {width, height } from '../global/dimension';
 import * as Font from 'expo-font';
@@ -12,6 +13,11 @@ const Login = () => {
   const navigation = useNavigation();
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  
+    //아이디, 비밀번호 저장할 상태 변수
+    const [id, setID] = useState('');
+    const [pw, setPW] = useState('');
+    const passwordRef = useRef();
 
   useEffect(() => {
       loadFonts();
@@ -29,10 +35,7 @@ const Login = () => {
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.select({ ios: 'padding' })}
-      style={[styles.container]}
-    >
+    <KeyboardAwareScrollView contentContainerStyle={{flex:1}}>
       <Pressable
         style={[styles.container]}
         onPress={() => Keyboard.dismiss()}
@@ -52,6 +55,9 @@ const Login = () => {
                 title={'아이디'}
                 keyboardType={KeyboardTypes.EMAIL}
                 returnKeyType={ReturnKeyTypes.NEXT}
+                onSubmitEditing={()=>passwordRef.current.focus()}
+                value={id}
+                onChangeText={text=>setID(text)}
               />
             </View>
             <View style={styles.text}>
@@ -59,6 +65,9 @@ const Login = () => {
                 title={'비밀번호'}
                 returnKeyType={ReturnKeyTypes.DONE}
                 secureTextEntry
+                value={pw}
+                onChangeText={text=>setPW(text)}
+                ref={passwordRef}
               />
             </View>
           </View>
@@ -78,7 +87,7 @@ const Login = () => {
           ></SignUpButton>
         </View>
       </Pressable>
-    </KeyboardAvoidingView>
+    </KeyboardAwareScrollView>
   );
 };
 

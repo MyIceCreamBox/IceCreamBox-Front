@@ -36,11 +36,11 @@ const SignUpButton = ({title, onPress, buttonStyle}) => {
         );
 };
 
-// SignUpButton.proptypes = {
-//     title: PropTypes.string.isRequired,
-//     onPress: PropTypes.func.isRequired,
-//     buttonStyle: PropTypes.object,
-// };
+SignUpButton.proptypes = {
+    title: PropTypes.string.isRequired,
+    onPress: PropTypes.func.isRequired,
+    buttonStyle: PropTypes.object,
+};
 
 const styles = StyleSheet.create({
     button:{
