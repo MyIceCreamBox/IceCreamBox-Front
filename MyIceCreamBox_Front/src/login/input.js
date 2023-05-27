@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, Platform,TextInput } from "react-native";
-import PropTypes from 'prop-types'
+import { StyleSheet, Text, View, Platform, TextInput} from "react-native";
+import { useEffect, useState} from 'react';
+import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
-import { useState } from "react";
 
 export const KeyboardTypes = {
     DEFAULT: 'default',
@@ -13,10 +13,28 @@ export const ReturnKeyTypes = {
     NEXT: 'next'
 }
 
-Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf'),});
+// Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf'),});
 
 
-const Input = ({title, maxLength ,keyboardType, returnKeyType, secureTextEntry, ref, value, useState}) => {
+const Input = ({title, maxLength ,keyboardType, returnKeyType, secureTextEntry, ref, value}) => {
+    
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+        loadFonts();
+    }, []);
+
+    async function loadFonts() {
+        await Font.loadAsync({
+        locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
+        });
+        setFontsLoaded(true);
+    }
+
+    if (!fontsLoaded) {
+        return null;
+    }
+    
     return (
         <View 
             behavior={Platform.select({ios:'padding'})}
