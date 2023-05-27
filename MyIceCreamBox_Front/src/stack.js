@@ -4,6 +4,7 @@ import Page404 from './etc/page404';
 import Login from './login/login';
 import SignUp from './login/signup';
 import LoggedInMainpage from './loggedInMainpage/loggedInMainpage';
+import MyPage from './mypage/mypage';
 
 const Stack = createNativeStackNavigator();
 
@@ -33,6 +34,11 @@ const StackNavigation = () => {
       <Stack.Screen
         name="LoggedInMainpage"
         component={LoggedInMainpage}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="MyPage"
+        component={MyPage}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
