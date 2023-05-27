@@ -1,53 +1,44 @@
 import Button from '../component/Button';
 import SignUpButton from './signup_btn';
 import { StatusBar } from 'expo-status-bar';
-import {
-  StyleSheet,
-  Image,
-  View,
-  useWindowDimensions,
-  KeyboardAvoidingView,
-  Keyboard,
-  Platform,
-  Pressable,
-} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, Image, View, KeyboardAvoidingView, Keyboard, Platform, Pressable,} from 'react-native';
+import {useEffect, useState} from 'react';
 import Input, { KeyboardTypes, ReturnKeyTypes } from './input';
+import {width, height } from '../global/dimension';
 import * as Font from 'expo-font';
 
-const Login = ({ navigation }) => {
-  const screenWidth = useWindowDimensions().width;
-  const screenHeight = useWindowDimensions().height;
+const Login = () => {
+  const navigation = useNavigation();
 
-  const onPress = () => navigation.navigate('SignUp');
+  const [fontsLoaded, setFontsLoaded] = useState(false);
 
-  // useEffect(async() => {
-  //     await Font.loadAsync({
-  //         "locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf'),
-  //     });
-  //     setIsReady(true);
-  // }, [])
+  useEffect(() => {
+      loadFonts();
+  }, []);
 
-  Font.loadAsync({
-    locus_sangsang: require('icecream_box/assets/fonts/locus_sangsang.otf'),
-  });
+  async function loadFonts() {
+      await Font.loadAsync({
+      locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
+      });
+      setFontsLoaded(true);
+  }
+
+  if (!fontsLoaded) {
+      return null;
+  }
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.select({ ios: 'padding' })}
-      style={[styles.container, { width: screenWidth, height: screenHeight }]}
+      style={[styles.container]}
     >
       <Pressable
-        style={[styles.container, { width: screenWidth, height: screenHeight }]}
+        style={[styles.container]}
         onPress={() => Keyboard.dismiss()}
       >
         <StatusBar style="auto" />
-        <View
-          style={{
-            top: '17.2%',
-            width: screenWidth * 0.78,
-            height: screenHeight * 0.06,
-          }}
-        >
+        <View style={[styles.view]}>
           <Image
             source={require('icecream_box/assets/login/login_title.png')}
             style={[styles.title]}
@@ -55,12 +46,7 @@ const Login = ({ navigation }) => {
         </View>
 
         <View style={{ top: '29.6%' }}>
-          <View
-            style={[
-              styles.input,
-              { width: screenWidth * 0.88, height: screenHeight * 0.14 },
-            ]}
-          >
+          <View style={styles.input}>
             <View style={styles.text}>
               <Input
                 title={'아이디'}
@@ -81,18 +67,14 @@ const Login = ({ navigation }) => {
         <View style={{ top: '48.7%' }}>
           <Button
             color="rgba(255, 232, 143, 1)"
-            buttonStyle={[
-              { width: screenWidth * 0.6, height: screenHeight * 0.06 },
-            ]}
+            buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="로그인"
             onPress={() => navigation.navigate('LoggedInMainpage')} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
           ></Button>
           <SignUpButton
-            buttonStyle={[
-              { width: screenWidth * 0.6, height: screenHeight * 0.06 },
-            ]}
+            buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="회원가입"
-            onPress={onPress}
+            onPress={() => navigation.navigate('SignUp')}
           ></SignUpButton>
         </View>
       </Pressable>
@@ -104,12 +86,24 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'column',
     alignItems: 'center',
+    width: width,
+    height: height
+  },
+  view:{
+    top: '17.2%', 
+    width: width * 0.78, 
+    height: height * 0.06,
   },
   text: {
     fontStyle: 'normal',
     fontWeight: 400,
     fontSize: 20,
     color: '#000000',
+  },
+  input:{
+    width: width * 0.88, 
+    height: height * 0.14,
+    fontFamily: 'locus_sangsang'
   },
   inputText: {
     padding: 5,

@@ -4,8 +4,11 @@ import { Modal ,View,Text, StyleSheet, Image, useWindowDimensions, TouchableOpac
 import { useState } from 'react';
 import MainToLoginBtn from './mainTologin_btn';
 import * as Font from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
 
-const MainPage = ({navigation}) => {
+const MainPage = () => {
+  const navigation = useNavigation();
+
   const screenWidth = useWindowDimensions().width
   const screenHeight = useWindowDimensions().height
 

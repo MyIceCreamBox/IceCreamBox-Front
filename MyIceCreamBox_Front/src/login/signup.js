@@ -1,16 +1,16 @@
 import Button from "../component/Button";
 import DoubleCheckBtn from "./doubleCheck_btn";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,Text,View,useWindowDimensions, Keyboard,KeyboardAvoidingView, Platform, Pressable, Alert, ScrollView } from "react-native";
+import { StyleSheet,Text,View, Keyboard,KeyboardAvoidingView, Platform, Pressable, ScrollView } from "react-native";
 import Input, { KeyboardTypes, ReturnKeyTypes } from "./input";
 import * as Font from "expo-font";
-import { useState, createRef } from "react";
+import { useState, createRef, useEffect} from "react";
+import {width, height } from '../global/dimension';
+import { useNavigation } from '@react-navigation/native';
 
-const SignUp = ({navigation}) => {
+const SignUp = () => {
 
-    // 화면 변수
-    const screenWidth = useWindowDimensions().width;
-    const screenHeight = useWindowDimensions().height;
+    const navigation = useNavigation();
 
     //아이디, 비밀번호, 비밀번호 확인,닉네임 저장할 상태 변수
     const [email, setEmail] = useState('');
@@ -24,31 +24,47 @@ const SignUp = ({navigation}) => {
     const nameInputRef = createRef();
 
     // 로그인 버튼 Press => Login 컴포넌트
-    const onPress = () => navigation.navigate('Login');
+    // const onPress = () => navigation.navigate('Login');
 
     // 확인 버튼 Press
-    const onSubmit = () => {
-        Keyboard.dismiss();
-        Alert.alert({email},{pw},{name});
-    }
+    // const onSubmit = () => {
+    //     navigation.navigate('Login');
+    //     Keyboard.dismiss();
+    //     Alert.alert({email},{pw},{name});
+    // }
 
     // 중복 확인 버튼 Press
     // const onDoubleCheck = () => {
     //     if({pw}=={checkPW}) 
     // }
-    Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf'),});
-    
+
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {
+        loadFonts();
+    }, []);
+
+    async function loadFonts() {
+        await Font.loadAsync({
+        locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
+        });
+        setFontsLoaded(true);
+    }
+
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return(
         
         <KeyboardAvoidingView 
             behavior={Platform.select({ios:'padding'})}
-            style={[{width:screenWidth, height:screenHeight},styles.container, ]}
+            style={styles.container}
         > 
             <ScrollView >
-            <Pressable style={[styles.container, {width:screenWidth, height:screenHeight}]} onPress={()=>Keyboard.dismiss()}>
+            <Pressable style={styles.container} onPress={()=>Keyboard.dismiss()}>
                 <StatusBar style="auto"/>
-                <View style={{ top:'10.9%', width : screenWidth * 0.346 ,height : screenHeight * 0.056}}>
+                <View style={styles.header}>
                     <Text
                         style={[styles.basicText,styles.title]}>
                         회원가입
@@ -56,7 +72,7 @@ const SignUp = ({navigation}) => {
                 </View>
 
                 <View style={{top:'14.19%'}}>
-                    <View style={[styles.input, {width:screenWidth * 0.88, height : screenHeight*0.14}]}>
+                    <View style={[styles.input]}>
                         <View>
                             <Input 
                                 title={"아이디"}
@@ -70,6 +86,7 @@ const SignUp = ({navigation}) => {
                         <View>
                             <Input 
                                 title={"비밀번호"}
+                                keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 secureTextEntry
                                 value={pw}
@@ -80,6 +97,7 @@ const SignUp = ({navigation}) => {
                         <View>
                             <Input 
                                 title={"비밀번호 확인"}
+                                keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 secureTextEntry
                                 value={checkPW}
@@ -101,6 +119,7 @@ const SignUp = ({navigation}) => {
                         <View>
                             <Input 
                                 title={"닉네임"}
+                                keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.DONE}
                                 value={name}
                                 maxLength={15}
@@ -111,26 +130,26 @@ const SignUp = ({navigation}) => {
                     </View>
                 </View>
 
-                <View style={{top:'54.8%', width:screenWidth * 0.88, height : screenHeight*0.14}}>
+                <View style={styles.footer}>
                     <View style={{flexDirection:'row-reverse'}}>
                         <DoubleCheckBtn  
                             color='#FF6969'
                             buttonStyle={[
-                                {width: screenWidth*0.3 ,
-                                height: screenHeight*0.04,
+                                {width: width*0.3 ,
+                                height: height*0.04,
                                 marginBottom: '18%'}]}
                             title='중복 확인'
-                            onPress={onSubmit}/>
+                            onPress={() => navigation.navigate('Login')}/>
                     </View>
-                    <View style={{width:screenWidth * 0.88, flexDirection:'row', justifyContent:'center'}}>
+                    <View style={styles.submit}>
                         <Button
                             color='rgba(255, 232, 143, 1)'
                             buttonStyle={[
-                                {width: screenWidth*0.6 ,
-                                height: screenHeight*0.06,
+                                {width: width*0.6 ,
+                                height: height*0.06,
                                 margin:'0%'}]}
                             title='확인'
-                            onPress={onSubmit}/>       
+                            onPress={() => navigation.navigate('Login')}/>       
                     </View>              
                 </View>
             </Pressable>
@@ -143,6 +162,13 @@ const styles = StyleSheet.create({
     container:{
         flexDirection: 'column',
         alignItems:'center',
+        width:width, 
+        height:height
+    },
+    header:{
+        top:'10.9%', 
+        width : width * 0.346 ,
+        height : height * 0.056
     },
     basicText:{
         fontFamily: 'locus_sangsang',
@@ -155,6 +181,10 @@ const styles = StyleSheet.create({
     }
     ,text:{
         fontSize: 20,
+    },
+    input:{
+        width:width * 0.88, 
+        height : height*0.14
     },
     inputText:{
         padding:5,
@@ -171,6 +201,16 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         backgroundColor:'black',
         fontSize: 10
+    },
+    footer:{
+        top:'54.8%', 
+        width:width * 0.88, 
+        height : height*0.14
+    },
+    submit:{
+        width:width * 0.88, 
+        flexDirection:'row', 
+        justifyContent:'center'
     }
 
 });
