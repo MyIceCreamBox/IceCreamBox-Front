@@ -6,7 +6,6 @@ import SpeechBubble from './main/speechBubble';
 import Rabbit from './main/rabbit';
 import TitleText from './main/title';
 import Hill from './main/hill';
-import Heart from './main/heart';
 import Icecream from './main/iceCream';
 import Ellipse from './main/ellipse';
 import BigCloud1 from './clouds/bigCloud1';
@@ -43,7 +42,6 @@ const LoggedInMainpage = () => {
             <BigCloud4 />
             <SmallCloud1 />
             <SmallCloud2 />
-            <Heart />
             <Icecream />
             <Ellipse />
             <ButtonIceCheck
