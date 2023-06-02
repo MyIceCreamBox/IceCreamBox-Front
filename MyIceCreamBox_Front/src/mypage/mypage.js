@@ -97,6 +97,7 @@ const styles = StyleSheet.create({
   scroll: {
     width: width * 0.821,
     height: height * 0.533,
+    borderRadius: 20,
     backgroundColor: '#FFFFEE',
   },
   pinkbox: {
@@ -112,6 +113,7 @@ const styles = StyleSheet.create({
     borderColor: '#FF6969',
     borderRadius: 20,
     marginTop: height * 0.015,
+    padding: 26,
   },
   beigeBox: {
     width: width * 0.821,
