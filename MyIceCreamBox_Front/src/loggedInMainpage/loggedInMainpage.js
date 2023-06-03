@@ -82,14 +82,14 @@ const LoggedInMainpage = () => {
             <Icecream />
             <Ellipse />
             <ButtonIceCheck
-              title="checkMyIcecream"
+              title="내 아이스크림 확인"
               onPress={() => navigation.navigate('MyPage')}
             />
           </View>
           <View style={styles.bottom}>
-            <ButtonSend title="sendGift" onPress={() => {}} />
+            <ButtonSend title="보내기" onPress={() => {}} />
             <ButtonShare
-              title="share"
+              title="링크 공유"
               onPress={async () =>
                 await Share.share({
                   message: `My Icecream Box에 놀러와! 함께 할래? \n http://${myLink}`,

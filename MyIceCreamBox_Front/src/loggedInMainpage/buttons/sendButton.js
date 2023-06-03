@@ -23,7 +23,7 @@ const ButtonSend = ({ title, onPress }) => {
             },
           })
             .then(function (res) {
-              console.log('기회 가져오기 성공 ' + res.data.data);
+              console.log('남은 기회 가져오기 성공');
               const myChance = res.data.data;
               setMyChanceNum(myChance); // 상태 변수에 값을 저장
             })
@@ -35,7 +35,7 @@ const ButtonSend = ({ title, onPress }) => {
         }
       })
       .catch((error) => {
-        console.log('토큰 가져오기 실패', error);
+        console.log('실패', error);
       });
   };
 
@@ -52,7 +52,7 @@ const ButtonSend = ({ title, onPress }) => {
   }
 
   if (!fontsLoaded) {
-    return null; // Return null or a loading indicator while the fonts are being loaded
+    return null;
   }
 
   return (
@@ -80,14 +80,16 @@ const styles = StyleSheet.create({
   container: {
     width: width * 0.359,
     height: height * 0.062,
-    borderRadius: 27,
+
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,
+
     shadowColor: '#393939',
     shadowOffset: { width: 3, height: 3 },
     shadowRadius: 0.5,
     shadowOpacity: 0.3,
+    borderRadius: 27,
   },
   word: {
     fontSize: width * 0.051,
