@@ -7,10 +7,6 @@ import { width, height } from '../../global/dimension';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-// const Ellipse = () => {
-//   return <Image source={ellipse} style={styles.container} />;
-// };
-
 const Ellipse = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [myIceNum, setMyIceNum] = useState(0); // num을 상태 변수로 선언
@@ -23,12 +19,11 @@ const Ellipse = () => {
             method: 'get',
             url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/count',
             headers: {
-              Authorization: `${token}`, // 헤더에 토큰을 추가합니다.
+              Authorization: `${token}`, // 헤더에 토큰을 추가
             },
           })
             .then(function (res) {
-              console.log('res:', res.data.data);
-              console.log('가져오기 성공 ' + res.data);
+              console.log('받은 선물 개수 가져오기 성공 ' + res.data.data);
               const iceNum = res.data.data;
               setMyIceNum(iceNum); // 상태 변수에 값을 저장
             })

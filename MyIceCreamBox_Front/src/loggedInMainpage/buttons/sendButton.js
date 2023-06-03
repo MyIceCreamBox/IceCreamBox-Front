@@ -2,13 +2,46 @@ import { Text, Pressable, StyleSheet, View } from 'react-native';
 import { width, height } from '../../global/dimension';
 import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // eslint-disable-next-line react/prop-types
 const ButtonSend = ({ title, onPress }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
+  const [myChanceNum, setMyChanceNum] = useState(0);
+
+  const getMyGiftChance = () => {
+    AsyncStorage.getItem('token')
+      .then((token) => {
+        if (token) {
+          axios({
+            method: 'get',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/chance',
+            headers: {
+              Authorization: `${token}`, // 헤더에 토큰 추가
+            },
+          })
+            .then(function (res) {
+              console.log('기회 가져오기 성공 ' + res.data.data);
+              const myChance = res.data.data;
+              setMyChanceNum(myChance); // 상태 변수에 값을 저장
+            })
+            .catch(function (err) {
+              console.log(`Error Message: ${err}`);
+            });
+        } else {
+          console.log('토큰이 없습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log('토큰 가져오기 실패', error);
+      });
+  };
+
   useEffect(() => {
     loadFonts();
+    getMyGiftChance();
   }, []);
 
   async function loadFonts() {
@@ -24,7 +57,7 @@ const ButtonSend = ({ title, onPress }) => {
 
   return (
     <View style={{ alignItems: 'center' }}>
-      <Text style={styles.count}>보낼 수 있는 기회 : 5회</Text>
+      <Text style={styles.count}>보낼 수 있는 기회 : {myChanceNum}</Text>
       <Pressable
         style={({ pressed }) => [
           styles.container,
