@@ -18,9 +18,46 @@ import ButtonSend from './buttons/sendButton';
 import ButtonShare from './buttons/shareButton';
 import ButtonIceCheck from './buttons/iceCheckButton';
 import { height } from '../global/dimension';
+import { Share } from 'react-native';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 
 const LoggedInMainpage = () => {
   const navigation = useNavigation();
+  const [myLink, setMyLink] = useState(''); // 사용자 링크 변수에 담기
+
+  const getUserLink = () => {
+    AsyncStorage.getItem('token')
+      .then((token) => {
+        if (token) {
+          axios({
+            method: 'get',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/share-link',
+            headers: {
+              Authorization: `${token}`, // 헤더에 토큰을 추가
+            },
+          })
+            .then(function (res) {
+              console.log('링크 공유 성공' + res.data.data);
+              const myLink = res.data.data;
+              setMyLink(myLink); // 상태 변수에 값을 저장
+            })
+            .catch(function (err) {
+              console.log(`Error Message: ${err}`);
+            });
+        } else {
+          console.log('토큰이 없습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log('실패', error);
+        throw error;
+      });
+  };
+  useEffect(() => {
+    getUserLink(); //링크 가져오기
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -51,7 +88,14 @@ const LoggedInMainpage = () => {
           </View>
           <View style={styles.bottom}>
             <ButtonSend title="보내기" onPress={() => {}} />
-            <ButtonShare title="링크 공유" onPress={() => {}} />
+            <ButtonShare
+              title="링크 공유"
+              onPress={async () =>
+                await Share.share({
+                  message: `My Icecream Box에 놀러와! 함께 할래? \n http://${myLink}`,
+                })
+              }
+            />
           </View>
         </View>
       </View>

@@ -33,16 +33,17 @@ const styles = StyleSheet.create({
   container: {
     width: width * 0.23,
     height: height * 0.028,
-    borderRadius: 27,
+
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 4,
-    backgroundColor: '#BEFFB0',
+
+    backgroundColor: 'rgba(190, 255, 176, 0.7)',
     transform: [{ rotate: '2.4vdeg' }],
     marginTop: height * 0.8 * 0.742 * 0.838,
     marginLeft: (width * 0.8) / 2,
-    borderWidth: 1,
-    borderColor: '#000',
+    borderWidth: 0,
+    borderRadius: 27,
   },
   word: {
     fontSize: width * 0.026,
