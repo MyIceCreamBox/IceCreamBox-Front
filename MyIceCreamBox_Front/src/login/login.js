@@ -1,8 +1,9 @@
 import Button from '../component/Button';
 import SignUpButton from './signup_btn';
+import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Image, View, Keyboard, Pressable,} from 'react-native';
+import { StyleSheet, Image, View, Keyboard, Pressable, Alert} from 'react-native';
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import {useEffect, useState, useRef} from 'react';
 import Input, { KeyboardTypes, ReturnKeyTypes } from './input';
@@ -14,10 +15,10 @@ const Login = () => {
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
   
-    //아이디, 비밀번호 저장할 상태 변수
-    const [id, setID] = useState('');
-    const [pw, setPW] = useState('');
-    const passwordRef = useRef();
+  //아이디, 비밀번호 저장할 상태 변수
+  const [email, setID] = useState('');
+  const [pw, setPW] = useState('');
+  const passwordRef = useRef();
 
   useEffect(() => {
       loadFonts();
@@ -32,6 +33,27 @@ const Login = () => {
 
   if (!fontsLoaded) {
       return null;
+  }
+  function login() {
+    if (email.trim() === "") {Alert.alert("아이디 입력 확인", "아이디가 입력되지 않았습니다.");} 
+    else if (pw.trim() === "") {Alert.alert("비밀번호 입력 확인", "비밀번호가 입력되지 않았습니다.");}
+    else {
+      axios({
+        method: "post",
+        url: "http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/login",
+        data: {
+          email: email,
+          pw: pw
+        },
+      })
+      .then(function(resp) 
+        {console.log(resp.data);
+          if (resp.data.data !== null && resp.data.data != "" ) {
+            console.log("로그인 성공"); 
+            navigation.navigate('LoggedInMainpage')
+          } else { Alert.alert("로그인 실패", resp.data.description);}
+        }).catch(function(err) {console.log(`Error Message: ${err}`); })
+   }
   }
 
   return (
@@ -56,7 +78,7 @@ const Login = () => {
                 keyboardType={KeyboardTypes.EMAIL}
                 returnKeyType={ReturnKeyTypes.NEXT}
                 onSubmitEditing={()=>passwordRef.current.focus()}
-                value={id}
+                value={email}
                 onChangeText={text=>setID(text)}
               />
             </View>
@@ -78,7 +100,7 @@ const Login = () => {
             color="rgba(255, 232, 143, 1)"
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="로그인"
-            onPress={() => navigation.navigate('LoggedInMainpage')} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
+            onPress={() => login(email,pw)} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
           ></Button>
           <SignUpButton
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
