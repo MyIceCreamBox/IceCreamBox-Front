@@ -3,65 +3,89 @@ import SignUpButton from './signup_btn';
 import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, Image, View, Keyboard, Pressable, Alert} from 'react-native';
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import {useEffect, useState, useRef} from 'react';
+import {
+  StyleSheet,
+  Image,
+  View,
+  Keyboard,
+  Pressable,
+  Alert,
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { useEffect, useState, useRef } from 'react';
 import Input, { KeyboardTypes, ReturnKeyTypes } from './input';
-import {width, height } from '../global/dimension';
+import { width, height } from '../global/dimension';
 import * as Font from 'expo-font';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const navigation = useNavigation();
 
   const [fontsLoaded, setFontsLoaded] = useState(false);
-  
+
   //아이디, 비밀번호 저장할 상태 변수
   const [email, setID] = useState('');
   const [pw, setPW] = useState('');
   const passwordRef = useRef();
 
   useEffect(() => {
-      loadFonts();
+    loadFonts();
   }, []);
 
   async function loadFonts() {
-      await Font.loadAsync({
+    await Font.loadAsync({
       locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
-      });
-      setFontsLoaded(true);
+    });
+    setFontsLoaded(true);
   }
 
   if (!fontsLoaded) {
-      return null;
+    return null;
   }
   function login() {
-    if (email.trim() === "") {Alert.alert("아이디 입력 확인", "아이디가 입력되지 않았습니다.");} 
-    else if (pw.trim() === "") {Alert.alert("비밀번호 입력 확인", "비밀번호가 입력되지 않았습니다.");}
-    else {
+    if (email.trim() === '') {
+      Alert.alert('아이디 입력 확인', '아이디가 입력되지 않았습니다.');
+    } else if (pw.trim() === '') {
+      Alert.alert('비밀번호 입력 확인', '비밀번호가 입력되지 않았습니다.');
+    } else {
       axios({
-        method: "post",
-        url: "http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/login",
+        method: 'post',
+        url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/login',
         data: {
           email: email,
-          pw: pw
+          pw: pw,
         },
       })
-      .then(function(resp) 
-        {console.log(resp.data);
-          if (resp.data.data !== null && resp.data.data != "" ) {
-            console.log("로그인 성공"); 
-            navigation.navigate('LoggedInMainpage')
-          } else { Alert.alert("로그인 실패", resp.data.description);}
-        }).catch(function(err) {console.log(`Error Message: ${err}`); })
-   }
+        .then(function (resp) {
+          console.log(resp.data.data.accessToken);
+          if (resp.data.data !== null && resp.data.data != '') {
+            console.log('로그인 성공' + token);
+
+            // 로그인 성공 후 토큰 저장
+            const token = resp.data.data.accessToken;
+            AsyncStorage.setItem('token', token)
+              .then(() => {
+                console.log('토큰 저장 성공', token);
+                navigation.navigate('LoggedInMainpage');
+              })
+              .catch((error) => {
+                console.log('토큰 저장 실패', error);
+              });
+
+            navigation.navigate('LoggedInMainpage');
+          } else {
+            Alert.alert('로그인 실패', resp.data.description);
+          }
+        })
+        .catch(function (err) {
+          console.log(`Error Message: ${err}`);
+        });
+    }
   }
 
   return (
-    <KeyboardAwareScrollView contentContainerStyle={{flex:1}}>
-      <Pressable
-        style={[styles.container]}
-        onPress={() => Keyboard.dismiss()}
-      >
+    <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}>
+      <Pressable style={[styles.container]} onPress={() => Keyboard.dismiss()}>
         <StatusBar style="auto" />
         <View style={[styles.view]}>
           <Image
@@ -77,9 +101,9 @@ const Login = () => {
                 title={'아이디'}
                 keyboardType={KeyboardTypes.EMAIL}
                 returnKeyType={ReturnKeyTypes.NEXT}
-                onSubmitEditing={()=>passwordRef.current.focus()}
+                onSubmitEditing={() => passwordRef.current.focus()}
                 value={email}
-                onChangeText={text=>setID(text)}
+                onChangeText={(text) => setID(text)}
               />
             </View>
             <View style={styles.text}>
@@ -88,7 +112,7 @@ const Login = () => {
                 returnKeyType={ReturnKeyTypes.DONE}
                 secureTextEntry
                 value={pw}
-                onChangeText={text=>setPW(text)}
+                onChangeText={(text) => setPW(text)}
                 ref={passwordRef}
               />
             </View>
@@ -100,7 +124,7 @@ const Login = () => {
             color="rgba(255, 232, 143, 1)"
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="로그인"
-            onPress={() => login(email,pw)} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
+            onPress={() => login(email, pw)} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
           ></Button>
           <SignUpButton
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
@@ -118,11 +142,11 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignItems: 'center',
     width: width,
-    height: height
+    height: height,
   },
-  view:{
-    top: '17.2%', 
-    width: width * 0.78, 
+  view: {
+    top: '17.2%',
+    width: width * 0.78,
     height: height * 0.06,
   },
   text: {
@@ -131,10 +155,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#000000',
   },
-  input:{
-    width: width * 0.88, 
+  input: {
+    width: width * 0.88,
     height: height * 0.14,
-    fontFamily: 'locus_sangsang'
+    fontFamily: 'locus_sangsang',
   },
   inputText: {
     padding: 5,
