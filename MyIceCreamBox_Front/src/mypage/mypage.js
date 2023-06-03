@@ -1,44 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Back from './title/back';
 import IceTitle from './title/iceTitle';
 import Have from './header/have';
+import NickName from './header/nickname';
 import Pie from './header/piechart';
-import DBar from './content/dBar';
-import PBar from './content/pBar';
-import OBar from './content/oBar';
-import Strawberry from './content/strawberry';
+import IceList from './content/iceList';
 import { width, height } from '../global/dimension';
 
 const IceBox = () => {
   const navigation = useNavigation();
-
-  const getChartData = () => {
-    const coneCount = 1; // Replace with the actual count of OBar components
-    const stickCount = 5; // Replace with the actual count of PBar components
-    const etcCount = 0; // Replace with the actual count of Strawberry components
-
-    const data = [
-      {
-        name: 'cone',
-        population: coneCount,
-        color: '#B5F562',
-      },
-      {
-        name: 'stick',
-        population: stickCount,
-        color: '#ffdddd',
-      },
-      {
-        name: 'etc',
-        population: etcCount,
-        color: '#609FFF',
-      },
-    ];
-
-    return data;
-  };
 
   return (
     <View style={styles.container}>
@@ -48,36 +20,15 @@ const IceBox = () => {
         <IceTitle />
       </View>
       <View style={styles.header}>
-        <Text
-          style={{
-            alignSelf: 'center',
-            fontSize: 20,
-            color: '#797979',
-          }}
-        >
-          ${'{닉네임}'}
-        </Text>
+        <NickName />
         <View style={styles.pinkbox}>
           <Have />
-          <Pie data={getChartData()} />
+          <Pie />
         </View>
         <Text style={{ marginTop: height * 0.021 }}></Text>
       </View>
       <View style={styles.content}>
-        <ScrollView style={styles.scroll}>
-          <View style={styles.iceList}>
-            <DBar />
-            <Strawberry />
-          </View>
-          <View style={styles.iceList}>
-            <PBar onPress={() => {}} />
-            <OBar />
-          </View>
-          <View style={styles.iceList}>
-            <PBar />
-            <OBar />
-          </View>
-        </ScrollView>
+        <IceList></IceList>
       </View>
       <View style={styles.footer}></View>
     </View>
@@ -88,7 +39,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-
   content: {
     justifyContent: 'center',
     alignItems: 'center',
