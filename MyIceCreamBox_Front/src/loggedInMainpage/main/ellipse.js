@@ -4,6 +4,8 @@ import { StyleSheet, Text } from 'react-native';
 import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 import { width, height } from '../../global/dimension';
+import axios from 'axios';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 // const Ellipse = () => {
 //   return <Image source={ellipse} style={styles.container} />;
@@ -11,9 +13,40 @@ import { width, height } from '../../global/dimension';
 
 const Ellipse = () => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const [myIceNum, setMyIceNum] = useState(0); // num을 상태 변수로 선언
+
+  const getIcecreamNum = () => {
+    AsyncStorage.getItem('token')
+      .then((token) => {
+        if (token) {
+          axios({
+            method: 'get',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/count',
+            headers: {
+              Authorization: `${token}`, // 헤더에 토큰을 추가합니다.
+            },
+          })
+            .then(function (res) {
+              console.log('res:', res.data.data);
+              console.log('가져오기 성공 ' + res.data);
+              const iceNum = res.data.data;
+              setMyIceNum(iceNum); // 상태 변수에 값을 저장
+            })
+            .catch(function (err) {
+              console.log(`Error Message: ${err}`);
+            });
+        } else {
+          console.log('토큰이 없습니다.');
+        }
+      })
+      .catch((error) => {
+        console.log('토큰 가져오기 실패', error);
+      });
+  };
 
   useEffect(() => {
     loadFonts();
+    getIcecreamNum(); //받은 아이스크림 개수 가져오기
   }, []);
 
   async function loadFonts() {
@@ -24,7 +57,7 @@ const Ellipse = () => {
   }
 
   if (!fontsLoaded) {
-    return null; // Return null or a loading indicator while the fonts are being loaded
+    return null;
   }
 
   return (
@@ -33,7 +66,7 @@ const Ellipse = () => {
       style={styles.container}
       resizeMode="contain"
     >
-      <Text style={styles.write}>3개</Text>
+      <Text style={styles.write}>{myIceNum}</Text>
     </ImageBackground>
   );
 };
