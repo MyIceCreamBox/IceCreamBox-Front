@@ -1,13 +1,14 @@
 import Button from "../component/Button";
 import DoubleCheckBtn from "./doubleCheck_btn";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,Text,View, Keyboard, Pressable } from "react-native";
+import { StyleSheet,Text,View, Keyboard, Pressable, Alert} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Input, { KeyboardTypes, ReturnKeyTypes } from "./input";
 import * as Font from "expo-font";
 import { useState, useEffect, useRef} from "react";
 import {width, height } from '../global/dimension';
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
 
 const SignUp = () => {
 
@@ -17,7 +18,7 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [pw, setPW] = useState('');
     const [checkPW, setCheckPW]= useState('');
-    const [name, setName] = useState('');
+    const [nickname, setNickname] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
     const emailRef = useRef();
@@ -38,8 +39,8 @@ const SignUp = () => {
     const [fontsLoaded, setFontsLoaded] = useState(false);
 
     useEffect(()=>{
-        setDisabled(!(email && pw && checkPW && name && !errorMessage));
-    }, [email,pw,checkPW,name,errorMessage]);
+        setDisabled(!(email && pw && checkPW && nickname && !errorMessage));
+    }, [email,pw,checkPW,nickname,errorMessage]);
 
     useEffect(() => {loadFonts();}, []);
 
@@ -53,6 +54,29 @@ const SignUp = () => {
     if (!fontsLoaded) {
         return null;
     }
+
+    function signup() {
+        axios({
+            method: 'post',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/join',
+            data: {
+              email: email,
+              pw: pw,
+              nickname: nickname,
+            },
+          }).then(function (resp) {
+            console.log('Signup : '+resp.data.data);
+              if (resp.data.data !== null && resp.data.data != '') {
+                navigation.navigate('Login');
+              } else {
+                Alert.alert('회원가입 실패', resp.data.description);
+              }
+            })
+            .catch(function (err) {
+              console.log(`Error Message: ${err}`);
+            });
+        
+      }
 
     return(
         <KeyboardAwareScrollView contentContainerStyle={{flex:1}}> 
@@ -110,9 +134,9 @@ const SignUp = () => {
                                 title={"닉네임"}
                                 keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.DONE}
-                                value={name}
+                                value={nickname}
                                 maxLength={15}
-                                onChangeText={text=>setName(text)}
+                                onChangeText={text=>setNickname(text)}
                                 />
                         </View>
                     </View>
@@ -125,16 +149,17 @@ const SignUp = () => {
                             buttonStyle={[
                                 {width: width*0.3, height: height*0.04,marginBottom: '18%',top:'5%'}]}
                             title='중복 확인'
+                            value={nickname}
                             onPress={() => {}}
                             disabled={disabled}/>
                     </View>
                     <View style={styles.submit}>
-                        <Button
+                        <Pressable
                             color='rgba(255, 232, 143, 1)'
                             buttonStyle={[
                                 {width: width*0.6 ,height: height*0.06, margin:'0%'}]}
                             title='확인'
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={signup()}
                             disabled={disabled}/>       
                     </View>              
                 </View>

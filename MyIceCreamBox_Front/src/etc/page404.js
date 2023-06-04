@@ -2,15 +2,34 @@ import { StatusBar } from 'expo-status-bar';
 import { useWindowDimensions, StyleSheet, Text,View } from 'react-native';
 import ErrorBackground from './page404_background';
 import Button from '../component/Button';
+import { useNavigation } from '@react-navigation/native';
 import * as Font from "expo-font";
+import { useState, useEffect} from 'react';
 
-const Page404 = ({navigation}) => {
+const Page404 = () => {
+  const navigation = useNavigation();
+
   const screenWidth = useWindowDimensions().width
   const screenHeight = useWindowDimensions().height
 
   const onPress = () => navigation.navigate('MainPage');
 
-  Font.loadAsync({"RecipekoreaOTF": require('icecream_box/assets/fonts/RecipekoreaOTF.otf'),});
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  useEffect(() => {loadFonts();}, []);
+
+    async function loadFonts() {
+        await Font.loadAsync({
+        locus_sangsang: require('../../assets/fonts/RecipekoreaOTF.ttf'),
+        });
+        setFontsLoaded(true);
+    }
+
+    if (!fontsLoaded) {
+        return null;
+    }
+
+  // Font.loadAsync({"RecipekoreaOTF": require('icecream_box/assets/fonts/RecipekoreaOTF.otf'),});
 
 
   return (
