@@ -7,12 +7,13 @@ import {
   Text,
 } from 'react-native';
 import { useState, useEffect } from 'react';
-import dBar from '../../../assets/imgs/DBar.png';
+import bBar from '../../../assets/imgs/BBar.png';
 import closeButton from '../../../assets/imgs/CloseButton.png';
 import { width, height } from '../../global/dimension';
 import * as Font from 'expo-font';
+import FriendMessage from './friendMessage';
 
-const DBar = () => {
+const BBar = (item) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -39,20 +40,17 @@ const DBar = () => {
   return (
     <View>
       <TouchableOpacity onPress={toggleModal}>
-        <Image source={dBar} style={styles.container} />
+        <Image source={bBar} style={styles.container} />
       </TouchableOpacity>
       <Modal visible={modalVisible} transparent={true}>
         <View style={styles.modalContainer}>
           <TouchableOpacity onPress={toggleModal} style={styles.closeButton}>
             <Image source={closeButton} />
           </TouchableOpacity>
-          <Text style={styles.nickname}> ${'{보낸사람닉네임}'}</Text>
-          <Image source={dBar} style={styles.modalImage} />
+          <Text style={styles.nickname}> {`${item.item.senderNickname}`}</Text>
+          <Image source={bBar} style={styles.modalImage} />
           <View style={styles.textarea}>
-            <Text style={styles.message}>
-              내용 입력 .... 내가 만든 쿠키~ 사실 아니고 아이스크림이야
-              친구야... 사실 이거 내가 만든 것도 아니야 다 거짓말이야 .....
-            </Text>
+            <FriendMessage item={item} />
           </View>
         </View>
       </Modal>
@@ -110,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DBar;
+export default BBar;

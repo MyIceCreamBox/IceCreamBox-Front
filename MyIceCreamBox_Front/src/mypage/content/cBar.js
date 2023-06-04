@@ -7,13 +7,13 @@ import {
   Text,
 } from 'react-native';
 import { useState, useEffect } from 'react';
-import oBar from '../../../assets/imgs/OBar.png';
+import cBar from '../../../assets/imgs/CBar.png';
 import closeButton from '../../../assets/imgs/CloseButton.png';
 import { width, height } from '../../global/dimension';
 import * as Font from 'expo-font';
 import FriendMessage from './friendMessage';
 
-const OBar = (item) => {
+const CBar = (item) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const toggleModal = () => {
@@ -34,13 +34,13 @@ const OBar = (item) => {
   }
 
   if (!fontsLoaded) {
-    return null; // Return null or a loading indicator while the fonts are being loaded
+    return null;
   }
 
   return (
     <View>
       <TouchableOpacity onPress={toggleModal}>
-        <Image source={oBar} style={styles.container} />
+        <Image source={cBar} style={styles.container} />
       </TouchableOpacity>
       <Modal visible={modalVisible} transparent={true}>
         <View style={styles.modalContainer}>
@@ -48,7 +48,7 @@ const OBar = (item) => {
             <Image source={closeButton} />
           </TouchableOpacity>
           <Text style={styles.nickname}> {`${item.item.senderNickname}`}</Text>
-          <Image source={oBar} style={styles.modalImage} />
+          <Image source={cBar} style={styles.modalImage} />
           <View style={styles.textarea}>
             <FriendMessage item={item} />
           </View>
@@ -108,4 +108,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default OBar;
+export default CBar;
