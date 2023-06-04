@@ -4,6 +4,10 @@ import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
 import { showToast } from "../component/Toast";
 
+
+
+
+
 const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -23,7 +27,6 @@ const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
         return null;
     }
 
-
     return (
         <Pressable
             style={({pressed})=>[
@@ -32,7 +35,7 @@ const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
                 pressed && {backgroundColor:'#FF6969'},
                 buttonStyle,
             ]}
-            onPress={showToast}
+            onPress={onPress}
             onPressOut={onPress}
             disabled={disabled}
             >

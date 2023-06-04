@@ -1,13 +1,15 @@
 import Button from "../component/Button";
 import DoubleCheckBtn from "./doubleCheck_btn";
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet,Text,View, Keyboard, Pressable } from "react-native";
+import { StyleSheet,Text,View, Keyboard, Pressable, Alert} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import Input, { KeyboardTypes, ReturnKeyTypes } from "./input";
 import * as Font from "expo-font";
 import { useState, useEffect, useRef} from "react";
 import {width, height } from '../global/dimension';
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+import { showToast } from "../component/Toast";
 
 const SignUp = () => {
 
@@ -17,8 +19,10 @@ const SignUp = () => {
     const [email, setEmail] = useState('');
     const [pw, setPW] = useState('');
     const [checkPW, setCheckPW]= useState('');
-    const [name, setName] = useState('');
+    const [nickname, setNickname] = useState('');
+    const [existence, setExistence] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
+
 
     const emailRef = useRef();
     const pwRef = useRef();
@@ -27,19 +31,23 @@ const SignUp = () => {
     //email, 비밀번호, 비밀번호 확인, 닉네임 입력이 없고 에러메세지가 존재하는 경우 => 회원가입 비활성화
     const [disabled, setDisabled] = useState(true);
 
+    const yes = '사용 가능한 닉네임입니다.' ;
+    const no = '이미 존재하는 닉네임입니다.' ;
+    const success = '회원가입이 완료되었습니다.' ;
+
+
     useEffect(()=>{
         let errMsg='';
-        if (pw !== checkPW) {
-            errMsg = '*비밀번호가 일치하지 않습니다.';
-        }else{errMsg='';}
+        if (pw !== checkPW) { errMsg = '*비밀번호가 일치하지 않습니다.';}
+        else{errMsg='';}
         setErrorMessage(errMsg);
     }, [pw,checkPW]);
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
 
     useEffect(()=>{
-        setDisabled(!(email && pw && checkPW && name && !errorMessage));
-    }, [email,pw,checkPW,name,errorMessage]);
+        setDisabled(!(email && pw && checkPW && nickname && !errorMessage));
+    }, [email,pw,checkPW,nickname,errorMessage]);
 
     useEffect(() => {loadFonts();}, []);
 
@@ -50,9 +58,46 @@ const SignUp = () => {
         setFontsLoaded(true);
     }
 
-    if (!fontsLoaded) {
-        return null;
-    }
+    if (!fontsLoaded) {return null;}
+
+    function signup() {
+        axios({
+            method: 'post',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/join',
+            data: {
+              email: email,
+              pw: pw,
+              nickname: nickname,
+            },
+          }).then(function (resp) {
+              if (resp.data.description== null) {
+                Alert.alert('회원가입 성공', success);                
+                navigation.navigate('Login');
+              } else {Alert.alert('회원가입 실패', resp.data.description);}
+            })
+            .catch(function (err) { console.log(`Error Message: ${err}`);});
+        
+      }
+
+      function checkNickname() { 
+        axios({
+            method: 'post',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/nickname',
+            data: {
+              nickname: nickname,
+            },
+          }).then(function (resp) {
+            if (resp.data.description== null || resp.data.data.nickname=='') {
+                if(resp.data.data.existence) {setExistence(no);}
+                else if(!resp.data.data.existence) {setExistence(yes);}
+            } 
+            else {setExistence(resp.data.description);}
+            })
+            .catch(function (err) {
+              console.log(`Error Message: ${err}`);
+            });
+            return existence;
+      }
 
     return(
         <KeyboardAwareScrollView contentContainerStyle={{flex:1}}> 
@@ -61,7 +106,6 @@ const SignUp = () => {
                 <View style={styles.header}>
                     <Text style={[styles.basicText,styles.title]}>회원가입</Text>
                 </View>
-
                 <View style={{top:'14.19%'}}>
                     <View style={[styles.input]}>
                         <View>
@@ -74,8 +118,7 @@ const SignUp = () => {
                                 onSubmitEditing={()=>{
                                     setEmail(email);
                                     emailRef.current.focus();
-                                }}
-                                />
+                                }} />
                         </View>
                         <View>
                             <Input 
@@ -98,8 +141,7 @@ const SignUp = () => {
                                 secureTextEntry
                                 value={checkPW}
                                 onChangeText={text=>setCheckPW(text)}
-                                onSubmitEditing={()=>{confirmPWRef.current.focus();}}
-                            />
+                                onSubmitEditing={()=>{confirmPWRef.current.focus();}} />
                             <View style={styles.checkPassword}>
                                 <Text style={styles.errorText}>{errorMessage}</Text>
                             </View>
@@ -110,9 +152,9 @@ const SignUp = () => {
                                 title={"닉네임"}
                                 keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.DONE}
-                                value={name}
+                                value={nickname}
                                 maxLength={15}
-                                onChangeText={text=>setName(text)}
+                                onChangeText={text=>setNickname(text)}
                                 />
                         </View>
                     </View>
@@ -125,7 +167,7 @@ const SignUp = () => {
                             buttonStyle={[
                                 {width: width*0.3, height: height*0.04,marginBottom: '18%',top:'5%'}]}
                             title='중복 확인'
-                            onPress={() => {}}
+                            onPress={() => {showToast(checkNickname())}}
                             disabled={disabled}/>
                     </View>
                     <View style={styles.submit}>
@@ -134,7 +176,7 @@ const SignUp = () => {
                             buttonStyle={[
                                 {width: width*0.6 ,height: height*0.06, margin:'0%'}]}
                             title='확인'
-                            onPress={() => navigation.navigate('Login')}
+                            onPress={() => {signup()}}
                             disabled={disabled}/>       
                     </View>              
                 </View>
@@ -161,12 +203,9 @@ const styles = StyleSheet.create({
         color: '#000000',
         textAlign: 'center'
     },
-    title:{
-        fontSize: 40,
-    }
-    ,text:{
-        fontSize: 20,
-    },
+    title:{fontSize: 40,}
+    ,text:{fontSize: 20,}
+    ,
     input:{
         width:width * 0.88, 
         height : height*0.14

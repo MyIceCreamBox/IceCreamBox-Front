@@ -1,7 +1,13 @@
 import Toast from "react-native-root-toast";
 import { width, height} from "../global/dimension";
+import * as Font from "expo-font";
 
-export const showToast = () => {
+
+export const showToast=(type)=>{
+
+  Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf')});
+
+
     const toastOutStyle = {
       width: width * 0.728, // Set the desired width
       height: height * 0.134, // Set the desired height
@@ -32,7 +38,7 @@ export const showToast = () => {
       opacity: 1,
     });
 
-    Toast.show('사용 가능한 닉네임입니다.', {
+    Toast.show(type, {
       duration: 3000,
       position: Toast.positions.BOTTOM - height * 0.008,
       shadow: false,
@@ -48,4 +54,4 @@ export const showToast = () => {
         fontFamily: 'locus_sangsang',
       },
     });
-  };
+  }

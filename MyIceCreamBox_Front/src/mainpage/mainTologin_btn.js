@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         fontFamily:'locus_sangsang',
         fontSize: 24,
         fontStyle: 'normal',
-        fontWeight: 400,
+        // fontWeight: 400,
         textAlign: 'center'
     }
 })

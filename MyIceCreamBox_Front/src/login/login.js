@@ -57,12 +57,12 @@ const Login = () => {
         },
       })
         .then(function (resp) {
-          console.log(resp.data.data.accessToken);
+          console.log(resp.data.accessToken);
           if (resp.data.data !== null && resp.data.data != '') {
             console.log('로그인 성공' + token);
 
             // 로그인 성공 후 토큰 저장
-            const token = resp.data.data.accessToken;
+            const token = resp.data.accessToken;
             AsyncStorage.setItem('token', token)
               .then(() => {
                 console.log('토큰 저장 성공', token);
@@ -99,7 +99,7 @@ const Login = () => {
             <View style={styles.text}>
               <Input
                 title={'아이디'}
-                keyboardType={KeyboardTypes.EMAIL}
+                // keyboardType={KeyboardTypes.EMAIL}
                 returnKeyType={ReturnKeyTypes.NEXT}
                 onSubmitEditing={() => passwordRef.current.focus()}
                 value={email}
@@ -124,7 +124,7 @@ const Login = () => {
             color="rgba(255, 232, 143, 1)"
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="로그인"
-            onPress={() => login(email, pw)} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
+            onPress={() => login()} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
           ></Button>
           <SignUpButton
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
