@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import Back from './title/back';
 import IceTitle from './title/iceTitle';
-import Have from './header/have';
 import NickName from './header/nickname';
 import Pie from './header/piechart';
 import IceList from './content/iceList';
@@ -22,7 +21,6 @@ const IceBox = () => {
       <View style={styles.header}>
         <NickName />
         <View style={styles.pinkbox}>
-          <Have />
           <Pie />
         </View>
         <Text style={{ marginTop: height * 0.021 }}></Text>
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignSelf: 'center',
     width: width * 0.877,
-    height: height * 0.208,
+    height: height * 0.228, // 0.208
     backgroundColor: '#FFF2F2',
     alignItems: 'center',
     justifyContent: 'space-evenly',

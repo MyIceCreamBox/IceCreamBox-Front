@@ -1,45 +1,63 @@
 import { View, FlatList, Text } from 'react-native';
 import { StyleSheet } from 'react-native';
+import axios from 'axios';
 import { width, height } from '../../global/dimension';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useState, useEffect } from 'react';
 
-import DBar from './dBar';
 import PBar from './pBar';
 import OBar from './oBar';
+import CBar from './cBar';
+import BBar from './bBar';
+import CPDBar from './cpdBar';
+import CTDBar from './ctdBar';
+import MBACon from './mbaCon';
+import SOCon from './soCon';
+import Strawberry from './strawberry';
 
 const IceList = () => {
-  const data = [
-    { id: '1', name: 'Item 1' },
-    { id: '2', name: 'Item 2' },
-    { id: '3', name: 'Item 3' },
-    { id: '4', name: 'Item 4' },
-    { id: '5', name: 'Item 5' },
-    { id: '6', name: 'Item 6' },
-    { id: '7', name: 'Item 7' },
-    { id: '8', name: 'Item 8' },
-    { id: '9', name: 'Item 9' },
-  ];
-  console.log(data[0].id);
+  const [data, setData] = useState([{}]);
+
+  useEffect(() => {
+    AsyncStorage.getItem('token').then((token) => {
+      if (token) {
+        axios({
+          method: 'get',
+          url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/my-page',
+          headers: {
+            Authorization: `${token}`,
+          },
+        })
+          .then(function (res) {
+            setData(res.data.data.myIceCreams);
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    });
+  }, []);
 
   const renderItem = ({ item }) => (
     <View style={styles.iceList}>
-      {item.id === '1' ? (
-        <OBar />
-      ) : item.id === '2' ? (
-        <DBar />
-      ) : item.id === '3' ? (
-        <PBar />
-      ) : item.id === '4' ? (
-        <DBar />
-      ) : item.id === '5' ? (
-        <PBar />
-      ) : item.id === '6' ? (
-        <OBar />
-      ) : item.id === '7' ? (
-        <OBar />
-      ) : item.id === '8' ? (
-        <PBar />
-      ) : item.id === '9' ? (
-        <DBar />
+      {item.iceCreamName === '이거먹으면나랑사귀는바' ? (
+        <OBar item={item} />
+      ) : item.iceCreamName === '이거먹으면에이쁠받는바' ? (
+        <PBar item={item} />
+      ) : item.iceCreamName === '이거먹으면추워바' ? (
+        <CBar item={item} />
+      ) : item.iceCreamName === '흑마법사가만든저체온증바' ? (
+        <BBar item={item} />
+      ) : item.iceCreamName === '쿨복숭아쌍쌍바' ? (
+        <CPDBar item={item} />
+      ) : item.iceCreamName === '초콜릿태닝쌍쌍바' ? (
+        <CTDBar item={item} />
+      ) : item.iceCreamName === '물고기도반한에어콘' ? (
+        <MBACon item={item} />
+      ) : item.iceCreamName === '여름이온지얼마나오렌지콘' ? (
+        <SOCon item={item} />
+      ) : item.iceCreamName === '베리베리더워콘' ? (
+        <Strawberry item={item} />
       ) : (
         <Text>없어요 없다구요</Text>
       )}
@@ -51,7 +69,7 @@ const IceList = () => {
       <FlatList
         data={data}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item, index) => index.toString()}
         numColumns={2}
       />
     </View>
