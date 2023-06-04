@@ -20,7 +20,7 @@ const Page404 = () => {
 
     async function loadFonts() {
         await Font.loadAsync({
-        locus_sangsang: require('../../assets/fonts/RecipekoreaOTF.ttf'),
+        RecipekoreaOTF: require('../../assets/fonts/RecipekoreaOTF.ttf'),
         });
         setFontsLoaded(true);
     }
@@ -28,9 +28,6 @@ const Page404 = () => {
     if (!fontsLoaded) {
         return null;
     }
-
-  // Font.loadAsync({"RecipekoreaOTF": require('icecream_box/assets/fonts/RecipekoreaOTF.otf'),});
-
 
   return (
     <View style={[styles.container,{width: screenWidth, height: screenHeight}]}>
@@ -64,6 +61,7 @@ const styles = StyleSheet.create({
   },
   code:{
     /* 404 */
+    
     top: '24.9%',
     fontSize: 60,
     color: '#FF6969',

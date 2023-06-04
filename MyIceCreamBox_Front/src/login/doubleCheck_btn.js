@@ -1,12 +1,14 @@
-import { Pressable, Text, StyleSheet, Alert} from "react-native";
+import { Pressable, Text, StyleSheet} from "react-native";
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
 import { showToast } from "../component/Toast";
-import axios from "axios";
 
 
-const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled, value}) => {
+
+
+
+const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -25,26 +27,6 @@ const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled, value}) => {
         return null;
     }
 
-    function checkNickname(nickname) {
-        axios({
-            method: 'post',
-            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/nickname',
-            data: {
-              nickname: nickname,
-            },
-          }).then(function (resp) {
-              if (resp.data.data !== null && resp.data.data != '') {
-                if(resp.data.data.existence) {showToast(2)}
-                else if(!resp.data.data.existence) {showToast(1)}
-              } else {
-                Alert.alert('닉네임 중복 확인 실패', resp.data.description);
-              }
-            })
-            .catch(function (err) {
-              console.log(`Error Message: ${err}`);
-            });
-      }
-
     return (
         <Pressable
             style={({pressed})=>[
@@ -53,8 +35,7 @@ const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled, value}) => {
                 pressed && {backgroundColor:'#FF6969'},
                 buttonStyle,
             ]}
-            value={value}
-            onPress={checkNickname(value)}
+            onPress={onPress}
             onPressOut={onPress}
             disabled={disabled}
             >

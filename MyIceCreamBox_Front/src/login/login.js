@@ -99,7 +99,7 @@ const Login = () => {
             <View style={styles.text}>
               <Input
                 title={'아이디'}
-                keyboardType={KeyboardTypes.EMAIL}
+                // keyboardType={KeyboardTypes.EMAIL}
                 returnKeyType={ReturnKeyTypes.NEXT}
                 onSubmitEditing={() => passwordRef.current.focus()}
                 value={email}

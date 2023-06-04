@@ -1,9 +1,23 @@
-import { Pressable, Text } from "react-native";
-import { StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet} from 'react-native';
+import { useState, useEffect} from 'react';
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
 
 const Button = ({title, onPress, buttonStyle, disabled}) => {
+    const [fontsLoaded, setFontsLoaded] = useState(false);
+
+    useEffect(() => {loadFonts();}, []);
+  
+      async function loadFonts() {
+          await Font.loadAsync({
+          locus_sangsang: require('../../assets/fonts/locus_sangsang.ttf'),
+          });
+          setFontsLoaded(true);
+      }
+  
+      if (!fontsLoaded) {
+          return null;
+      }
 
     Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf')});
     

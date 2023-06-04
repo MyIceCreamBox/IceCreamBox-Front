@@ -1,18 +1,12 @@
 import Toast from "react-native-root-toast";
 import { width, height} from "../global/dimension";
-import { useState } from "react";
+import * as Font from "expo-font";
 
-export const showToast = (num) => {
 
-    const [type, setType] = useState('');
+export const showToast=(type)=>{
 
-    const yes = '사용 가능한 닉네임입니다.' ;
-    const no = '이미 존재하는 닉네임입니다.' ;
-    const success = '회원가입이 완료되었습니다.' ;
+  Font.loadAsync({"locus_sangsang": require('icecream_box/assets/fonts/locus_sangsang.otf')});
 
-    if(num == 1){setType(yes)}
-    else if(num == 2){setType(no)}
-    else if(num == 3){setType(success)}
 
     const toastOutStyle = {
       width: width * 0.728, // Set the desired width
@@ -60,4 +54,4 @@ export const showToast = (num) => {
         fontFamily: 'locus_sangsang',
       },
     });
-  };
+  }
