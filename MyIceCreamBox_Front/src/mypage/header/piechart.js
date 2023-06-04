@@ -65,7 +65,11 @@ const Pie = () => {
         max = arr[a];
       }
     }
-    rate = (max * 100) / total;
+    if (total === 0) {
+      rate = 0;
+    } else {
+      rate = (max * 100) / total;
+    }
 
     if (max === o) {
       name = '이거먹으면나랑사귀는바';
