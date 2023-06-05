@@ -26,7 +26,7 @@ export const showToast=(type)=>{
     };
 
     Toast.show('', {
-      duration: 3000,
+      duration: 1000,
       position: Toast.positions.BOTTOM,
       shadow: true,
       animation: true,
@@ -39,7 +39,7 @@ export const showToast=(type)=>{
     });
 
     Toast.show(type, {
-      duration: 3000,
+      duration: 1000,
       position: Toast.positions.BOTTOM - height * 0.008,
       shadow: false,
       animation: true,

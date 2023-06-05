@@ -3,7 +3,7 @@ import DoubleCheckBtn from "./doubleCheck_btn";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet,Text,View, Keyboard, Pressable, Alert} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Input, { KeyboardTypes, ReturnKeyTypes } from "./input";
+import Input, { ReturnKeyTypes } from "./input";
 import * as Font from "expo-font";
 import { useState, useEffect, useRef} from "react";
 import {width, height } from '../global/dimension';
@@ -45,6 +45,10 @@ const SignUp = () => {
 
     const [fontsLoaded, setFontsLoaded] = useState(false);
 
+    useEffect(() => {
+        if(nickname!='') showToast(existence);
+      }, [existence]);
+
     useEffect(()=>{
         setDisabled(!(email && pw && checkPW && nickname && !errorMessage));
     }, [email,pw,checkPW,nickname,errorMessage]);
@@ -77,27 +81,28 @@ const SignUp = () => {
             })
             .catch(function (err) { console.log(`Error Message: ${err}`);});
         
-      }
+    }
 
-      function checkNickname() { 
-        axios({
-            method: 'post',
-            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/nickname',
-            data: {
-              nickname: nickname,
-            },
-          }).then(function (resp) {
-            if (resp.data.description== null || resp.data.data.nickname=='') {
-                if(resp.data.data.existence) {setExistence(no);}
-                else if(!resp.data.data.existence) {setExistence(yes);}
-            } 
-            else {setExistence(resp.data.description);}
-            })
-            .catch(function (err) {
-              console.log(`Error Message: ${err}`);
+    async function checkNickname() {
+        try {
+            const resp = await axios.post('http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/users/nickname', {
+            nickname: nickname,
             });
-            return existence;
-      }
+            const errmsg = resp.data.description;
+
+            if (resp.data.description == null) {
+            if (resp.data.data.existence) {setExistence(no);} 
+            else if (!resp.data.data.existence) {setExistence(yes);}
+            } else {setExistence(errmsg);}
+        } catch (err) {
+            console.log(`Error Message: ${err}`);
+        }
+        return existence; 
+    }
+
+    function showToastAndCheckNickname() {
+        checkNickname();
+    }
 
     return(
         <KeyboardAwareScrollView contentContainerStyle={{flex:1}}> 
@@ -111,7 +116,6 @@ const SignUp = () => {
                         <View>
                             <Input 
                                 title={"아이디"}
-                                keyboardType={KeyboardTypes.EMAIL}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 value={email}
                                 onChangeText={text=>setEmail(text)}
@@ -124,7 +128,6 @@ const SignUp = () => {
                             <Input 
                                 ref={emailRef}
                                 title={"비밀번호"}
-                                keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 secureTextEntry
                                 value={pw}
@@ -136,7 +139,6 @@ const SignUp = () => {
                             <Input 
                                 ref={pwRef}
                                 title={"비밀번호 확인"}
-                                keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.NEXT}
                                 secureTextEntry
                                 value={checkPW}
@@ -150,9 +152,9 @@ const SignUp = () => {
                             <Input 
                                 ref={confirmPWRef}
                                 title={"닉네임"}
-                                keyboardType={KeyboardTypes.DEFAULT}
                                 returnKeyType={ReturnKeyTypes.DONE}
                                 value={nickname}
+                                minLength={2}
                                 maxLength={15}
                                 onChangeText={text=>setNickname(text)}
                                 />
@@ -167,7 +169,7 @@ const SignUp = () => {
                             buttonStyle={[
                                 {width: width*0.3, height: height*0.04,marginBottom: '18%',top:'5%'}]}
                             title='중복 확인'
-                            onPress={() => {showToast(checkNickname())}}
+                            onPress={showToastAndCheckNickname}
                             disabled={disabled}/>
                     </View>
                     <View style={styles.submit}>

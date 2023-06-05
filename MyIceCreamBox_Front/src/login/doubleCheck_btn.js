@@ -35,7 +35,7 @@ const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
                 pressed && {backgroundColor:'#FF6969'},
                 buttonStyle,
             ]}
-            onPress={onPress}
+            // onPress={onPress}
             onPressOut={onPress}
             disabled={disabled}
             >
