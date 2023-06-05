@@ -57,9 +57,9 @@ const Login = () => {
         },
       })
         .then(function (resp) {
-          console.log(resp.data.accessToken);
+          // console.log(resp.data.accessToken);
           if (resp.data.data !== null && resp.data.data != '') {
-            console.log('로그인 성공' + token);
+            console.log('로그인 성공');
 
             // 로그인 성공 후 토큰 저장
             const token = resp.data.accessToken;

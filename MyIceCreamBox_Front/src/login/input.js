@@ -16,7 +16,7 @@ export const ReturnKeyTypes = {
 
 const Input = forwardRef(
     (
-        {title, onChangeText, maxLength , returnKeyType, secureTextEntry, value, onSubmitEditing, disabled}, 
+        {title, onChangeText, maxLength, returnKeyType, secureTextEntry, value, onSubmitEditing, disabled}, 
         ref ) => {
             const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -45,7 +45,6 @@ const Input = forwardRef(
                         autoCapitalize="none"
                         autoCorrect={false}
                         maxLength={maxLength}
-                        // keyboardType={keyboardType}
                         returnKeyType={returnKeyType}
                         secureTextEntry={secureTextEntry}
                         onChangeText={onChangeText}
