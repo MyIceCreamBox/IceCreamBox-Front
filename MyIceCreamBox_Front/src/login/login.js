@@ -57,12 +57,12 @@ const Login = () => {
         },
       })
         .then(function (resp) {
-          // console.log(resp.data.accessToken);
+          // console.log('Token'+resp.data.data.accessToken);
           if (resp.data.data !== null && resp.data.data != '') {
             console.log('로그인 성공');
 
             // 로그인 성공 후 토큰 저장
-            const token = resp.data.accessToken;
+            const token = resp.data.data.accessToken;
             AsyncStorage.setItem('token', token)
               .then(() => {
                 console.log('토큰 저장 성공', token);
