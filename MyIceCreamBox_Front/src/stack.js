@@ -41,6 +41,11 @@ const StackNavigation = () => {
         component={MyPage}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="Logout"
+        component={MainPage}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 };
