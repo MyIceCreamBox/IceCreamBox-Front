@@ -1,13 +1,16 @@
-import { Text, Pressable, StyleSheet, View } from 'react-native';
+import { Text, Pressable, StyleSheet, View, Alert } from 'react-native';
 import { width, height } from '../../global/dimension';
 import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 // import Toast from 'react-native-toast-message';
 import Toast from 'react-native-root-toast';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 // eslint-disable-next-line react/prop-types
 const ButtonShare = ({ title, onPress }) => {
   const [fontsLoaded, setFontsLoaded] = useState(false);
+  const navigation = useNavigation();
 
   useEffect(() => {
     loadFonts();
@@ -71,6 +74,39 @@ const ButtonShare = ({ title, onPress }) => {
     });
   };
 
+  const logout = () => {
+    Alert.alert(
+      '로그아웃하시겠습니까?',
+      '',
+      [
+        {
+          text: 'Cancel',
+          onPress: () => console.log('Cancel Pressed'),
+          style: 'cancel',
+        },
+        {
+          text: 'OK',
+          onPress: () => {
+            fetch(
+              `http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/auth/login`,
+              {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              }
+            ).then(async () => {
+              // 로그아웃에 성공하면, AsyncStorage 를 비우고, 로그인화면으로 이동
+              await AsyncStorage.clear();
+              navigation.navigate('Logout');
+            });
+          },
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
   return (
     <View>
       <Text style={styles.count}> </Text>
@@ -85,11 +121,13 @@ const ButtonShare = ({ title, onPress }) => {
           },
         ]}
         onPress={showToast}
-        // onPressIn={showToast}
         onPressOut={onPress}
       >
         <Text style={styles.word}>{title}</Text>
       </Pressable>
+      <Text style={styles.logout} onPress={logout}>
+        로그아웃
+      </Text>
     </View>
   );
 };
@@ -113,6 +151,13 @@ const styles = StyleSheet.create({
   },
   count: {
     fontSize: width * 0.024,
+    fontFamily: 'locus_sangsang',
+  },
+  logout: {
+    position: 'absolute',
+    right: 15,
+    bottom: 30,
+    fontSize: width * 0.032,
     fontFamily: 'locus_sangsang',
   },
 });
