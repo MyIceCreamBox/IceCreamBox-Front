@@ -3,14 +3,7 @@ import SignUpButton from './signup_btn';
 import axios from 'axios';
 import { StatusBar } from 'expo-status-bar';
 import { useNavigation } from '@react-navigation/native';
-import {
-  StyleSheet,
-  Image,
-  View,
-  Keyboard,
-  Pressable,
-  Alert,
-} from 'react-native';
+import { StyleSheet, Image, View, Keyboard, Pressable, Alert} from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { useEffect, useState, useRef } from 'react';
 import Input, { KeyboardTypes, ReturnKeyTypes } from './input';
@@ -20,11 +13,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Login = () => {
   const navigation = useNavigation();
-
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   //아이디, 비밀번호 저장할 상태 변수
-  const [email, setID] = useState('');
+  const [email, setEmail] = useState('');
   const [pw, setPW] = useState('');
   const passwordRef = useRef();
 
@@ -42,6 +34,7 @@ const Login = () => {
   if (!fontsLoaded) {
     return null;
   }
+
   function login() {
     if (email.trim() === '') {
       Alert.alert('아이디 입력 확인', '아이디가 입력되지 않았습니다.');
@@ -72,7 +65,7 @@ const Login = () => {
                 console.log('토큰 저장 실패', error);
               });
 
-            navigation.navigate('LoggedInMainpage');
+            // navigation.navigate('LoggedInMainpage');
           } else {
             Alert.alert('로그인 실패', resp.data.description);
           }
@@ -90,31 +83,29 @@ const Login = () => {
         <View style={[styles.view]}>
           <Image
             source={require('icecream_box/assets/login/login_title.png')}
-            style={[styles.title]}
-          />
+            style={[styles.title]}/>
         </View>
 
         <View style={{ top: '29.6%' }}>
           <View style={styles.input}>
             <View style={styles.text}>
               <Input
-                title={'아이디'}
-                // keyboardType={KeyboardTypes.EMAIL}
+                title={'이메일'}
+                keyboardType={KeyboardTypes.EMAIL}
                 returnKeyType={ReturnKeyTypes.NEXT}
                 onSubmitEditing={() => passwordRef.current.focus()}
                 value={email}
-                onChangeText={(text) => setID(text)}
-              />
+                onChangeText={(text) => setEmail(text)}/>
             </View>
             <View style={styles.text}>
               <Input
                 title={'비밀번호'}
+                keyboardType={KeyboardTypes.DEFAULT}
                 returnKeyType={ReturnKeyTypes.DONE}
                 secureTextEntry
                 value={pw}
                 onChangeText={(text) => setPW(text)}
-                ref={passwordRef}
-              />
+                ref={passwordRef}/>
             </View>
           </View>
         </View>
@@ -124,13 +115,11 @@ const Login = () => {
             color="rgba(255, 232, 143, 1)"
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="로그인"
-            onPress={() => login()} // 로그인 버튼 클릭 시 loggedInMainpage로 이동하도록 임시로 설정했습니다
-          ></Button>
+            onPress={() => login()}/>
           <SignUpButton
             buttonStyle={{ width: width * 0.6, height: height * 0.06 }}
             title="회원가입"
-            onPress={() => navigation.navigate('SignUp')}
-          ></SignUpButton>
+            onPress={() => navigation.navigate('SignUp')}/>
         </View>
       </Pressable>
     </KeyboardAwareScrollView>

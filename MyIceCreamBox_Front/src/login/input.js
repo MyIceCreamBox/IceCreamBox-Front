@@ -3,10 +3,10 @@ import { forwardRef, useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
 
-// export const KeyboardTypes = {
-//     DEFAULT: 'default',
-//     EMAIL:'email'
-// }
+export const KeyboardTypes = {
+    DEFAULT: 'default',
+    EMAIL:'email-address'
+}
 
 export const ReturnKeyTypes = {
     DONE: 'done',
@@ -16,7 +16,7 @@ export const ReturnKeyTypes = {
 
 const Input = forwardRef(
     (
-        {title, onChangeText, maxLength, returnKeyType, secureTextEntry, value, onSubmitEditing, disabled}, 
+        {title, onChangeText, maxLength, keyboardType, returnKeyType, secureTextEntry, value, onSubmitEditing, disabled}, 
         ref ) => {
             const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -45,6 +45,7 @@ const Input = forwardRef(
                         autoCapitalize="none"
                         autoCorrect={false}
                         maxLength={maxLength}
+                        keyboardType={keyboardType}
                         returnKeyType={returnKeyType}
                         secureTextEntry={secureTextEntry}
                         onChangeText={onChangeText}
@@ -63,7 +64,7 @@ Input.displayName="Input";
 
 
 Input.defaultProps = {
-    // keyboardType: KeyboardTypes.DEFAULT,
+    keyboardType: KeyboardTypes.DEFAULT,
     returnKeyType: ReturnKeyTypes.DONE
 };
 

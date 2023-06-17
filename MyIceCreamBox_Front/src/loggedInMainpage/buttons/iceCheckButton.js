@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     elevation: 4,
 
     backgroundColor: 'rgba(190, 255, 176, 0.7)',
-    transform: [{ rotate: '2.4vdeg' }],
+    transform: [{ rotate: '2.4deg' }],
     marginTop: height * 0.8 * 0.742 * 0.838,
     marginLeft: (width * 0.8) / 2,
     borderWidth: 0,

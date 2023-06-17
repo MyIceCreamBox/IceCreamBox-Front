@@ -3,7 +3,7 @@ import DoubleCheckBtn from "./doubleCheck_btn";
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet,Text,View, Keyboard, Pressable, Alert} from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import Input, { ReturnKeyTypes } from "./input";
+import Input, { ReturnKeyTypes, KeyboardTypes} from "./input";
 import * as Font from "expo-font";
 import { useState, useEffect, useRef} from "react";
 import {width, height } from '../global/dimension';
@@ -23,7 +23,6 @@ const SignUp = () => {
     const [existence, setExistence] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
 
-
     const emailRef = useRef();
     const pwRef = useRef();
     const confirmPWRef = useRef();
@@ -34,7 +33,6 @@ const SignUp = () => {
     const yes = '사용 가능한 닉네임입니다.' ;
     const no = '이미 존재하는 닉네임입니다.' ;
     const success = '회원가입이 완료되었습니다.' ;
-
 
     useEffect(()=>{
         let errMsg='';
@@ -115,8 +113,9 @@ const SignUp = () => {
                     <View style={[styles.input]}>
                         <View>
                             <Input 
-                                title={"아이디"}
+                                title={"이메일"}
                                 returnKeyType={ReturnKeyTypes.NEXT}
+                                keyboardType={KeyboardTypes.EMAIL}
                                 value={email}
                                 onChangeText={text=>setEmail(text)}
                                 onSubmitEditing={()=>{
@@ -129,6 +128,7 @@ const SignUp = () => {
                                 ref={emailRef}
                                 title={"비밀번호"}
                                 returnKeyType={ReturnKeyTypes.NEXT}
+                                keyboardType={KeyboardTypes.DEFAULT}
                                 secureTextEntry
                                 value={pw}
                                 onChangeText={text=>setPW(text)}
