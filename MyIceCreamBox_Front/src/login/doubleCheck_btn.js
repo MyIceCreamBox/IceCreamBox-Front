@@ -2,11 +2,6 @@ import { Pressable, Text, StyleSheet} from "react-native";
 import { useEffect, useState } from "react";
 import PropTypes from 'prop-types';
 import * as Font from 'expo-font';
-import { showToast } from "../component/Toast";
-
-
-
-
 
 const DoubleCheckBtn = ({title, onPress, buttonStyle, disabled}) => {
 
@@ -74,6 +69,5 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     }
 })
-
 
 export default DoubleCheckBtn;
