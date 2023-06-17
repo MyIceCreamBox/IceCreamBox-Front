@@ -5,8 +5,11 @@ import { PieChart } from 'react-native-chart-kit';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
+import { useNavigation } from '@react-navigation/native';
+
 
 const Pie = () => {
+  const navigation = useNavigation();
   const [data, setData] = useState([{}]);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
@@ -21,7 +24,11 @@ const Pie = () => {
           },
         })
           .then(function (res) {
-            setData(res.data.data.giftsStatisticsResList);
+            if(res.data.statusCode==404){
+              navigation.navigate('Page404');
+            }else{
+              setData(res.data.data.giftsStatisticsResList);
+            }
           })
           .catch(function (error) {
             console.log(error);

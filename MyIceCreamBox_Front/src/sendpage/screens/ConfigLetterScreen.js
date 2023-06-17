@@ -26,7 +26,11 @@ const ConfigLetterScreen = ({ route }) => {
   //     if(resp.data.description==null){
   //       console.log('보내기 성공')
   //     }else{
-  //       console.log('보내기 실패')
+            // if(resp.data.statusCode==404){
+            //   navigation.navigate('Page404');
+            // }else{
+            //   console.log('보내기 실패')
+            // }
   //     }
   //   })
   //   .catch(function (err) {

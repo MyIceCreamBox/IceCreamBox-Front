@@ -4,9 +4,12 @@ import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 // eslint-disable-next-line react/prop-types
 const ButtonSend = ({ title, onPress }) => {
+  const navigation = useNavigation();
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   const [myChanceNum, setMyChanceNum] = useState(0);
@@ -23,9 +26,13 @@ const ButtonSend = ({ title, onPress }) => {
             },
           })
             .then(function (res) {
-              console.log('남은 기회 가져오기 성공');
-              const myChance = res.data.data;
-              setMyChanceNum(myChance); // 상태 변수에 값을 저장
+              if(res.data.statusCode==404){
+                navigation.navigate('Page404');
+              }else{
+                console.log('남은 기회 가져오기 성공');
+                const myChance = res.data.data;
+                setMyChanceNum(myChance); // 상태 변수에 값을 저장
+              }
             })
             .catch(function (err) {
               console.log(`Error Message: ${err}`);
