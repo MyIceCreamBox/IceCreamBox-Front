@@ -12,27 +12,27 @@ const ConfigLetterScreen = ({ route }) => {
   const navigation = useNavigation();
   // eslint-disable-next-line react/prop-types
   const { receiverName, writer, letter, iceType } = route.params;
-  function sendLetter(){
-    axios({
-      method:'get',
-      url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/'+receiverName,
-      data:{
-        "iceCreamName":iceType,
-        "senderNickname":writer,
-        "message":letter
-      }
-    })
-    .then(function(resp){
-      if(resp.data.description==null){
-        console.log('보내기 성공')
-      }else{
-        console.log('보내기 실패')
-      }
-    })
-    .catch(function (err) {
-      console.log(`Error Message: ${err}`);
-    });
-  }
+  // function sendLetter(){
+  //   axios({
+  //     method:'get',
+  //     url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/'+receiverName,
+  //     data:{
+  //       "iceCreamName":iceType,
+  //       "senderNickname":writer,
+  //       "message":letter
+  //     }
+  //   })
+  //   .then(function(resp){
+  //     if(resp.data.description==null){
+  //       console.log('보내기 성공')
+  //     }else{
+  //       console.log('보내기 실패')
+  //     }
+  //   })
+  //   .catch(function (err) {
+  //     console.log(`Error Message: ${err}`);
+  //   });
+  // }
 
   return (
     <View style={styles.container}>
@@ -68,7 +68,7 @@ const ConfigLetterScreen = ({ route }) => {
       <View style={styles.containerBottom}>
 
         <NextBtn title='확인' type='goToFinishSend' onPress={() => {
-          sendLetter()
+          //sendLetter()
           navigation.navigate('FinshSendPage', {receiverName: receiverName,iceType: iceType,})
           }}></NextBtn>
       </View>
