@@ -40,8 +40,12 @@ const LoggedInMainpage = () => {
           })
             .then(function (res) {
               console.log('링크 공유 성공' + res.data.data);
+              if(res.data.statusCode==404){
+                navigation.navigate('Page404');
+              }else{
               const myLink = res.data.data;
               setMyLink(myLink); // 상태 변수에 값을 저장
+              }
             })
             .catch(function (err) {
               console.log(`Error Message: ${err}`);

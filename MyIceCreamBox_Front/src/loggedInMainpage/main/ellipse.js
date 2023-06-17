@@ -6,8 +6,12 @@ import * as Font from 'expo-font';
 import { width, height } from '../../global/dimension';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+
 
 const Ellipse = () => {
+  const navigation = useNavigation();
+
   const [fontsLoaded, setFontsLoaded] = useState(false);
   const [myIceNum, setMyIceNum] = useState(0); // num을 상태 변수로 선언
 
@@ -23,9 +27,13 @@ const Ellipse = () => {
             },
           })
             .then(function (res) {
-              console.log('받은 선물 개수 가져오기 성공 ' + res.data.data);
-              const iceNum = res.data.data;
-              setMyIceNum(iceNum); // 상태 변수에 값을 저장
+              if(res.data.statusCode==404){
+                navigation.navigate('Page404');
+              }else{
+                console.log('받은 선물 개수 가져오기 성공 ' + res.data.data);
+                const iceNum = res.data.data;
+                setMyIceNum(iceNum); // 상태 변수에 값을 저장
+              }
             })
             .catch(function (err) {
               console.log(`Error Message: ${err}`);
