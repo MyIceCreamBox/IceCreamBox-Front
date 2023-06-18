@@ -22,10 +22,13 @@ import { Share } from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
+import LoadingPage from '../etc/pageLoading';
 
 const LoggedInMainpage = () => {
   const navigation = useNavigation();
   const [myLink, setMyLink] = useState(''); // 사용자 링크 변수에 담기
+
+  const [ready, setReady] = useState(false);
 
   const getUserLink = () => {
     AsyncStorage.getItem('token')
@@ -63,7 +66,12 @@ const LoggedInMainpage = () => {
     getUserLink(); //링크 가져오기
   }, []);
 
-  return (
+  useEffect(()=>{
+    setTimeout(()=>{
+      setReady(true)
+    },3000)
+  },[])
+  return !ready ? <LoadingPage/> : (
     <View style={styles.container}>
       <StatusBar style="auto" />
       <Background />
