@@ -1,6 +1,8 @@
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { useState, useCallback } from 'react';
-import { Alert, StyleSheet, View } from 'react-native';
+import { useState, useCallback, useEffect } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Keyboard, Alert, StyleSheet, View } from 'react-native';
+
 import BackBtn from '../components/BackBtn';
 import Title from '../components/Title';
 import Explanation from '../components/Explanation';
@@ -12,7 +14,14 @@ import RedBorderBox from '../components/RedBorderBox';
 const SelectIcecream = () => {
 
   const navigation = useNavigation();
+  const [nickname, setNickname] = useState(null);
 
+  useEffect(() => {
+    (async () => {
+      const storedNickname = await AsyncStorage.getItem('nickname');
+      setNickname(storedNickname);
+    })();
+  }, []);
 
   const [selectedIcecream, setSelectedIcecream] = useState(null);
   const [receiverName, setReceiverName] = useState('');
@@ -27,10 +36,12 @@ const SelectIcecream = () => {
     }, [])
   );
 
+
   return (
     <View style={styles.container}>
+      <View style={styles.hiddenBox}></View>
       <View style={styles.containerTop1}>
-        <BackBtn type='goToSelectLetter' onPress={() => navigation.navigate('SelectIcecreamPage')}></BackBtn>
+        <BackBtn type='goToSelectLetter' onPress={() => navigation.navigate('LoggedInMainpage')}></BackBtn>
       </View>
       <View style={styles.containerTop2}>
         <Title title='아이스크림 선택'></Title>
@@ -63,7 +74,14 @@ const SelectIcecream = () => {
       </View>
       <View style={styles.containerBottom}>
         <NextBtn title='선택완료' type='goToWriteLetter' onPress={() => {
-          if (selectedIcecream) {
+
+          if (!receiverName) {
+            Alert.alert("받는 친구의 이름을 입력해주세요")
+          }
+          else if (receiverName == nickname) {
+            Alert.alert("나한테는 보낼 수 없어요!")
+          }
+          else if (selectedIcecream) {
             navigation.navigate('WriteLetterPage', { receiverName, selectedIcecream })
           } else {
             Alert.alert("아이스크림을 선택해주세요.")
@@ -77,13 +95,18 @@ const SelectIcecream = () => {
 
 
 const styles = StyleSheet.create({
+  hiddenBox: {
+    height: 50,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#fffff',
     alignContent: 'center',
     justifyContent: 'center',
     width: '100%',
-
+    
+    position: 'absolute', 
 
   },
   containerTop1: {
@@ -120,6 +143,7 @@ const styles = StyleSheet.create({
     flex: 2.5,
     backgroundColor: '#fff',
     alignItems: 'center',
+    paddingVertical:30,
     justifyContent: 'center',
   },
   containerIce: {

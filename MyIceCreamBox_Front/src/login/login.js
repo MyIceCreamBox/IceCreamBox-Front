@@ -156,6 +156,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     height: '60%',
   },
+ 
 });
 
 export default Login;

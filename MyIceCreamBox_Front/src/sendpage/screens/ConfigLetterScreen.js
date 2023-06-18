@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import { StyleSheet, View, Image, Text, Alert } from 'react-native';
 import BackBtn from '../components/BackBtn';
 import Explanation from '../components/Explanation';
 import NextBtn from '../components/NextBtn';
@@ -10,78 +10,147 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 // eslint-disable-next-line react/prop-types
 const ConfigLetterScreen = ({ route }) => {
 
+  var isSuccessed = true;
+  function icetypeToIcename(icetype) {
+    var iceName = '슈파두바';
+    var iceSrc = require('../../../assets/imgsForSendpage/ice01.png');
+    switch (icetype) {
+      case 'ice01':
+        iceSrc = require('../../../assets/imgsForSendpage/ice01.png');
+        iceName = '이거먹으면나랑사귀는바';
+        break;
+      case 'ice02':
+        iceSrc = require('../../../assets/imgsForSendpage/ice02.png');
+        iceName = '이거먹으면에이쁠받는바';
+        break;
+      case 'ice03':
+        iceSrc = require('../../../assets/imgsForSendpage/ice03.png');
+        iceName = '이거먹으면안돼바';
+        break;
+      case 'ice04':
+        iceSrc = require('../../../assets/imgsForSendpage/ice04.png');
+        iceName = '흑마법사가만든저체온증바';
+        break;
+      case 'ice05':
+        iceSrc = require('../../../assets/imgsForSendpage/ice05.png');
+        iceName = '쿨복숭아쌍쌍바';
+        break;
+      case 'ice06':
+        iceSrc = require('../../../assets/imgsForSendpage/ice06.png');
+        iceName = '초콜릿태닝쌍쌍바';
+        break;
+      case 'ice07':
+        iceSrc = require('../../../assets/imgsForSendpage/ice07.png');
+        iceName = '물고기도반한에어콘';
+        break;
+      case 'ice08':
+        iceSrc = require('../../../assets/imgsForSendpage/ice08.png');
+        iceName = '여름이온지얼마나오렌지콘';
+        break;
+      case 'ice09':
+        iceSrc = require('../../../assets/imgsForSendpage/ice09.png');
+        iceName = '베리베리더워콘';
+        break;
 
+    }
+    return iceName;
+  }
   const navigation = useNavigation();
   // eslint-disable-next-line react/prop-types
   const { receiverName, writer, letter, iceType } = route.params;
-  function sendLetter() {
-    axios({
-      method: 'post',
-      url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/',
-      // headers:{
-      //   Authorization: `${token}`
-      // },
-      data: {
-        "iceCreamName": iceType,
-        "senderNickname": writer,
-        "receiverNickname": receiverName,
-        "message": letter,
-      }
-    })
-      .then(function (resp) {
-        if (resp.data.description == null) {
-          console.log('보내기 성공'+resp.data.data)
+  // function sendLetter() {
+  //   AsyncStorage.getItem('token')
+  //     .then((token) => {
+  //       if (token) {
+  //         axios({
+  //           method: 'post',
+  //           url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send',
+  //           headers: {
+  //             Authorization: `${token}`, // 헤더에 토큰을 추가
+  //           },
+  //           data: {
+  //             "iceCreamName": icetypeToIcename(iceType),
+  //             "senderNickname": writer,
+  //             "receiverNickname": receiverName,
+  //             "message": letter,
+  //           }
+  //         })
+  //           .then(function (resp) {
+  //             if (resp.data.description == null) {
+  //               console.log('보내기 성공' + resp.data.data)
+  //               isSuccessed=true;
 
+  //             } else {
+  //               console.log(`아이스크림:${iceType}, 보내는사람:${writer} 받는사람:${receiverName}`)
+  //               console.log('보내기 실패')
+  //               isSuccessed=false;
+  //             }
+  //             console.log(resp)
+  //           })
+  //           .catch(function (err) {
+  //             console.log(err.response);
+  //           });
+  //       } else {
+  //         console.log('토큰이 없습니다.');
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.response);
+  //       throw error;
+  //     });
+  // }
+  async function sendLetter() {
+    isSuccessed = true;
+    await AsyncStorage.getItem('token')
+      .then((token) => {
+        if (token) {
+          return axios({
+            method: 'post',
+            url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send',
+            headers: {
+              Authorization: `${token}`, // 헤더에 토큰을 추가
+            },
+            data: {
+              "iceCreamName": icetypeToIcename(iceType),
+              "senderNickname": writer,
+              "receiverNickname": receiverName,
+              "message": letter,
+            }
+          })
         } else {
-          console.log('보내기 실패')
+          console.log('토큰이 없습니다.');
+          isSuccessed = false;
         }
-        console.log(resp)
+      })
+      .then(function (resp) {
+        if (resp && resp.data.description == null) {
+          console.log('보내기 성공' + resp.data.data)
+          isSuccessed = true;
+        } else {
+          console.log(`아이스크림:${iceType}, 보내는사람:${writer} 받는사람:${receiverName}`)
+          console.log('보내기 실패')
+          isSuccessed = false;
+        }
       })
       .catch(function (err) {
-        console.log(`Error Message: ${err}`);
+        console.log(err.response);
+        isSuccessed = false;
       });
-    // AsyncStorage.getItem('token')
-    //   .then((token) => {
-    //     if (token) {
-    //       axios({
-    //         method: 'post',
-    //         url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/',
-    //         // headers:{
-    //         //   Authorization: `${token}`
-    //         // },
-    //         data: {
-    //           "iceCreamName": iceType,
-    //           "senderNickname": writer,
-    //           "message": letter
-    //         }
-    //       })
-    //         .then(function (resp) {
-    //           if (resp.data.description == null) {
-    //             console.log('보내기 성공'+resp.data.data)
-
-    //           } else {
-    //             console.log('보내기 실패')
-    //           }
-    //           console.log(resp)
-    //         })
-    //         .catch(function (err) {
-    //           console.log(`Error Message: ${err}`);
-    //         });
-    //     } else {
-    //       console.log('토큰이 없습니다.')
-    //     }
-    //   })
   }
 
   return (
     <View style={styles.container}>
       <View style={styles.containerTop1}>
-        <BackBtn type='goToWriteLetter' onPress={() => navigation.navigate('WriteLetterPage',
-          {
-            receiverName: receiverName,
-            selectedIcecream: iceType,
-          }
-        )}></BackBtn>
+        <BackBtn type='goToWriteLetter' onPress={() => {
+          navigation.navigate('WriteLetterPage',
+            {
+              receiverName: receiverName,
+              selectedIcecream: iceType,
+            }
+          )
+        }
+
+        }></BackBtn>
       </View>
       <View style={styles.containerTop2}>
 
@@ -106,9 +175,23 @@ const ConfigLetterScreen = ({ route }) => {
 
       <View style={styles.containerBottom}>
 
-        <NextBtn title='확인' type='goToFinishSend' onPress={() => {
-          sendLetter()
-          navigation.navigate('FinshSendPage', { receiverName: receiverName, iceType: iceType, })
+        {/* <NextBtn title='확인' type='goToFinishSend' onPress={() => {
+          console.log(isSuccessed)
+          if (isSuccessed) {
+            sendLetter()
+            navigation.navigate('FinshSendPage', { receiverName: receiverName, iceType: iceType, })
+          } else {
+            Alert.alert('받는 친구를 찾을 수 없어요.')
+          }
+        }}></NextBtn> */}
+
+        <NextBtn title='확인' type='goToFinishSend' onPress={async () => {
+          await sendLetter();
+          if (isSuccessed) {
+            navigation.navigate('FinshSendPage', { receiverName: receiverName, iceType: iceType, })
+          } else {
+            Alert.alert('받는 친구를 찾을 수 없어요.')
+          }
         }}></NextBtn>
       </View>
     </View>
@@ -169,12 +252,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     marginHorizontal: '5%',
     borderRadius: 20,
-    height: '80%',
+    height: '70%',
     width: 280
 
   },
   writer: {
-    paddingBottom: '6%',
+    paddingBottom: '15%',
     paddingHorizontal: '15%',
 
   }

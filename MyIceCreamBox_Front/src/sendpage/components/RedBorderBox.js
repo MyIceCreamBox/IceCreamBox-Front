@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#FF6969',
         borderRadius: 15,
-        paddingHorizontal: 15,
+        paddingHorizontal: 80,
         paddingVertical: 5,
 
     },

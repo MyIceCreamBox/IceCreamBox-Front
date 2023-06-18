@@ -40,8 +40,12 @@ const LoggedInMainpage = () => {
           })
             .then(function (res) {
               console.log('링크 공유 성공' + res.data.data);
-              const myLink = res.data.data;
-              setMyLink(myLink); // 상태 변수에 값을 저장
+              if (res.data.statusCode == 404) {
+                navigation.navigate('Page404');
+              } else {
+                const myLink = res.data.data;
+                setMyLink(myLink); // 상태 변수에 값을 저장
+              }
             })
             .catch(function (err) {
               console.log(`Error Message: ${err}`);
@@ -87,8 +91,11 @@ const LoggedInMainpage = () => {
             />
           </View>
           <View style={styles.bottom}>
-          
-            <ButtonSend title="보내기" onPress={navigation.navigate('SelectIcecreamPage')} />
+
+            <ButtonSend title="보내기" onPress={() => {
+              console.log('보내기')
+              navigation.navigate('SelectIcecreamPage')
+            }} />
             <ButtonShare
               title="링크 공유"
               onPress={async () =>

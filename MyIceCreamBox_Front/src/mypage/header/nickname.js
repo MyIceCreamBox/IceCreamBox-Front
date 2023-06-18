@@ -2,9 +2,13 @@ import axios from 'axios';
 import { View, Text } from 'react-native';
 import { useState } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
 
 const NickName = () => {
   const [nickname, setNickName] = useState('');
+
+  const navigation = useNavigation();
+
 
   AsyncStorage.getItem('token').then((token) => {
     if (token) {
@@ -16,7 +20,12 @@ const NickName = () => {
         },
       })
         .then(function (res) {
-          setNickName(res.data.data.nickname);
+          if(res.data.statusCode==404){
+            navigation.navigate('Page404');
+          }else{
+            setNickName(res.data.data.nickname);
+            AsyncStorage.setItem('nickname', res.data.data.nickname);
+          }
         })
         .catch(function (error) {
           console.log(error);
