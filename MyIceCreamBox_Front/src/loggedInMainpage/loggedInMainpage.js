@@ -87,7 +87,8 @@ const LoggedInMainpage = () => {
             />
           </View>
           <View style={styles.bottom}>
-            <ButtonSend title="보내기" onPress={() => {}} />
+          
+            <ButtonSend title="보내기" onPress={navigation.navigate('SelectIcecreamPage')} />
             <ButtonShare
               title="링크 공유"
               onPress={async () =>

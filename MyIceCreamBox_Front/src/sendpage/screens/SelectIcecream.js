@@ -1,18 +1,21 @@
-import { useNavigation,useFocusEffect } from '@react-navigation/native';
-import { useState,useCallback } from 'react';
-import { Alert,StyleSheet, View } from 'react-native';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
+import { useState, useCallback } from 'react';
+import { Alert, StyleSheet, View } from 'react-native';
 import BackBtn from '../components/BackBtn';
 import Title from '../components/Title';
 import Explanation from '../components/Explanation';
 import NextBtn from '../components/NextBtn';
 import Icecream from '../components/Icecream';
+import RedBorderBox from '../components/RedBorderBox';
+
 
 const SelectIcecream = () => {
 
   const navigation = useNavigation();
 
-  const receiverName = '산타할아버지'; // string = props.receiverName
+
   const [selectedIcecream, setSelectedIcecream] = useState(null);
+  const [receiverName, setReceiverName] = useState('');
   const handleIcecreamSelect = (iceType) => {
     setSelectedIcecream(prev => prev === iceType ? null : iceType);
   }
@@ -31,7 +34,12 @@ const SelectIcecream = () => {
       </View>
       <View style={styles.containerTop2}>
         <Title title='아이스크림 선택'></Title>
-        <Explanation nickname={receiverName} contents='에게 어떤 아이스크림을 보낼까?'></Explanation>
+        <RedBorderBox
+          type='InputReceiver'
+          value={receiverName}
+          onChangeText={(text) => setReceiverName(text)}
+        />
+        {/* <Explanation nickname={receiverName} contents='에게 어떤 아이스크림을 보낼까?'></Explanation> */}
       </View>
       <View style={styles.containerMid}>
         <View style={styles.containerMidInner}>
@@ -75,6 +83,7 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     width: '100%',
+
 
   },
   containerTop1: {

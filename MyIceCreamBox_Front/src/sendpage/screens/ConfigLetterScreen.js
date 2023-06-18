@@ -6,32 +6,71 @@ import NextBtn from '../components/NextBtn';
 import RedBorderBox from '../components/RedBorderBox';
 import axios from 'axios';
 
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 // eslint-disable-next-line react/prop-types
 const ConfigLetterScreen = ({ route }) => {
+
+
   const navigation = useNavigation();
   // eslint-disable-next-line react/prop-types
   const { receiverName, writer, letter, iceType } = route.params;
-  function sendLetter(){
+  function sendLetter() {
     axios({
-      method:'get',
-      url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/'+receiverName,
-      data:{
-        "iceCreamName":iceType,
-        "senderNickname":writer,
-        "message":letter
+      method: 'post',
+      url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/',
+      // headers:{
+      //   Authorization: `${token}`
+      // },
+      data: {
+        "iceCreamName": iceType,
+        "senderNickname": writer,
+        "receiverNickname": receiverName,
+        "message": letter,
       }
     })
-    .then(function(resp){
-      if(resp.data.description==null){
-        console.log('보내기 성공')
-      }else{
-        console.log('보내기 실패')
-      }
-    })
-    .catch(function (err) {
-      console.log(`Error Message: ${err}`);
-    });
+      .then(function (resp) {
+        if (resp.data.description == null) {
+          console.log('보내기 성공'+resp.data.data)
+
+        } else {
+          console.log('보내기 실패')
+        }
+        console.log(resp)
+      })
+      .catch(function (err) {
+        console.log(`Error Message: ${err}`);
+      });
+    // AsyncStorage.getItem('token')
+    //   .then((token) => {
+    //     if (token) {
+    //       axios({
+    //         method: 'post',
+    //         url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send/',
+    //         // headers:{
+    //         //   Authorization: `${token}`
+    //         // },
+    //         data: {
+    //           "iceCreamName": iceType,
+    //           "senderNickname": writer,
+    //           "message": letter
+    //         }
+    //       })
+    //         .then(function (resp) {
+    //           if (resp.data.description == null) {
+    //             console.log('보내기 성공'+resp.data.data)
+
+    //           } else {
+    //             console.log('보내기 실패')
+    //           }
+    //           console.log(resp)
+    //         })
+    //         .catch(function (err) {
+    //           console.log(`Error Message: ${err}`);
+    //         });
+    //     } else {
+    //       console.log('토큰이 없습니다.')
+    //     }
+    //   })
   }
 
   return (
@@ -69,8 +108,8 @@ const ConfigLetterScreen = ({ route }) => {
 
         <NextBtn title='확인' type='goToFinishSend' onPress={() => {
           sendLetter()
-          navigation.navigate('FinshSendPage', {receiverName: receiverName,iceType: iceType,})
-          }}></NextBtn>
+          navigation.navigate('FinshSendPage', { receiverName: receiverName, iceType: iceType, })
+        }}></NextBtn>
       </View>
     </View>
 
@@ -127,17 +166,17 @@ const styles = StyleSheet.create({
   contents: {
     paddingTop: '3%',
     paddingHorizontal: '10%',
-    backgroundColor:'#fff',
-    marginHorizontal:'5%',
-    borderRadius:20,
-    height:'80%',
-    width:280
-    
+    backgroundColor: '#fff',
+    marginHorizontal: '5%',
+    borderRadius: 20,
+    height: '80%',
+    width: 280
+
   },
   writer: {
-    paddingBottom:'6%',
+    paddingBottom: '6%',
     paddingHorizontal: '15%',
-    
+
   }
 
 
