@@ -28,7 +28,7 @@ const FinshSendScreen = ({ route }) => {
       </View>
 
       <View style={styles.containerBottom}>
-        <NextBtn title='확인' type='goToWriteLetter' onPress={() => navigation.navigate('SelectIcecreamPage')}></NextBtn>
+        <NextBtn title='확인' type='goToWriteLetter' onPress={() => navigation.navigate('LoggedInMainpage')}></NextBtn>
       </View>
     </View>
 

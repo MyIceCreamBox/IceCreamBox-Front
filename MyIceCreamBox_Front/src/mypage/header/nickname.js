@@ -24,6 +24,7 @@ const NickName = () => {
             navigation.navigate('Page404');
           }else{
             setNickName(res.data.data.nickname);
+            AsyncStorage.setItem('nickname', res.data.data.nickname);
           }
         })
         .catch(function (error) {

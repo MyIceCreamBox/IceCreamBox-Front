@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import { Alert,StyleSheet, View } from 'react-native';
+import { Alert, StyleSheet, View, KeyboardAvoidingView,ScrollView  } from 'react-native';
 import BackBtn from '../components/BackBtn';
 import Title from '../components/Title';
 import Explanation from '../components/Explanation';
@@ -16,6 +16,12 @@ const WriteLetterScreen = ({ route }) => {
   const [letter, setLetter] = useState('');
 
   return (
+<KeyboardAvoidingView 
+    behavior={Platform.OS === "ios" ? "padding" : null} 
+    style={{ flex: 1 }}
+  >
+    <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
+    <View style={styles.hiddenBox}></View>
     <View style={styles.container}>
       <View style={styles.containerTop1}>
         <BackBtn type='goToSelectLetter' onPress={() => navigation.navigate('SelectIcecreamPage')}></BackBtn>
@@ -27,6 +33,8 @@ const WriteLetterScreen = ({ route }) => {
       </View>
       <View style={styles.containerMid}>
         <RedBorderBox type='img' iceType={selectedIcecream} style={styles.minItem}></RedBorderBox>
+
+
         <RedBorderBox
           type='TextField'
           style={styles.minItem}
@@ -39,44 +47,53 @@ const WriteLetterScreen = ({ route }) => {
             type='TextArea'
             style={styles.minItem}
             value={letter}
-            onChangeText={(text) => setLetter(text)}
+            onChangeText={(text) => {
+              setLetter(text);
+              
+              
+            }}
           ></RedBorderBox>
         </View>
 
       </View>
 
       <View style={styles.containerBottom}>
-      <NextBtn title='보내기' type='goToConfigLetter'
-        onPress={() => {
+        <NextBtn title='보내기' type='goToConfigLetter'
+          onPress={() => {
             if (!writer.trim() || !letter.trim()) {
-                let missingField = '';
-                if (!writer.trim() && !letter.trim()) {
-                    missingField = '작성자와 내용';
-                } else if (!writer.trim()) {
-                    missingField = '작성자';
-                } else {
-                    missingField = '내용';
-                }
-                Alert.alert(`${missingField}을(를) 입력해주세요.`);
+              let missingField = '';
+              if (!writer.trim() && !letter.trim()) {
+                missingField = '작성자와 내용';
+              } else if (!writer.trim()) {
+                missingField = '작성자';
+              } else {
+                missingField = '내용';
+              }
+              Alert.alert(`${missingField}을(를) 입력해주세요.`);
             } else {
-                navigation.navigate('ConfigLetterScreenPage', {
-                    receiverName: receiverName,
-                    writer: writer,
-                    letter: letter,
-                    iceType: selectedIcecream,
-                });
+              navigation.navigate('ConfigLetterScreenPage', {
+                receiverName: receiverName,
+                writer: writer,
+                letter: letter,
+                iceType: selectedIcecream,
+              });
             }
-        }}>
-    </NextBtn>
-        
+          }}>
+        </NextBtn>
+
       </View>
     </View>
-
+    </ScrollView>
+  </KeyboardAvoidingView>
 
   );
 };
 
 const styles = StyleSheet.create({
+  hiddenBox: {
+    height: 20,
+    backgroundColor: '#fff',
+  },
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -117,6 +134,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: -150,
   },
 
 
