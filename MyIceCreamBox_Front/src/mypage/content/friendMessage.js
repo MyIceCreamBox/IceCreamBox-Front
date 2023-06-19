@@ -17,8 +17,7 @@ const FriendMessage = (item) => {
             Authorization: `${token}`,
           },
         })
-          .then(function (res) {
-          })
+          .then(function (res) {})
           .catch(function (error) {
             console.log(error);
           });
