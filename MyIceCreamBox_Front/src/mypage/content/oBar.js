@@ -31,7 +31,6 @@ const OBar = (item) => {
           },
         })
           .then(function (res) {
-            // console.log(res.data.data.isAfter);
             setPossible(res.data.data.isAfter);
           })
           .catch(function (error) {
@@ -63,20 +62,20 @@ const OBar = (item) => {
   }
 
   if (!fontsLoaded) {
-    return null; // Return null or a loading indicator while the fonts are being loaded
+    return null;
   }
 
   const showToast = () => {
     const toastOutStyle = {
-      width: width * 0.728, // Set the desired width
-      height: height * 0.134, // Set the desired height
+      width: width * 0.728,
+      height: height * 0.134,
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
     };
     const toastInStyle = {
-      width: width * 0.665, // Set the desired width
-      height: height * 0.118, // Set the desired height
+      width: width * 0.665,
+      height: height * 0.118,
       borderRadius: 20,
       justifyContent: 'center',
       alignItems: 'center',
