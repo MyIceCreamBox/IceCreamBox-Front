@@ -13,7 +13,7 @@ const Stack = createNativeStackNavigator();
 
 const StackNavigation = () => {
   return (
-    <Stack.Navigator initialRouteName="Page404">
+    <Stack.Navigator initialRouteName="MainPage">
       <Stack.Screen
         name="Page404"
         component={Page404}

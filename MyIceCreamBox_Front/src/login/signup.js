@@ -227,7 +227,7 @@ const styles = StyleSheet.create({
         fontSize: 10
     },
     checkPassword:{
-        bottom:'20%',
+        bottom:'18%',
         justifyContent: 'flex-end',
     },
     footer:{
