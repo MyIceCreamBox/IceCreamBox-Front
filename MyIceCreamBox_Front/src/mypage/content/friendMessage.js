@@ -5,7 +5,6 @@ import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const FriendMessage = (item) => {
-  // const [data, setData] = useState([]);
   const [fontsLoaded, setFontsLoaded] = useState(false);
 
   useEffect(() => {
@@ -19,7 +18,6 @@ const FriendMessage = (item) => {
           },
         })
           .then(function (res) {
-            // setData(res.data.data.giftsStatisticsResList);
           })
           .catch(function (error) {
             console.log(error);

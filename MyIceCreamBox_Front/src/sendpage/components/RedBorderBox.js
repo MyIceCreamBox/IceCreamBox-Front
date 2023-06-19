@@ -23,9 +23,7 @@ const RedBorderBox = (props) => {
                     <TextInput style={styles.textFieldBox}
                         placeholder='작성자의 이름을 입력해 주세요.'
                         maxLength={15}
-                        // eslint-disable-next-line react/prop-types
                         value={props.value}
-                        // eslint-disable-next-line react/prop-types
                         onChangeText={props.onChangeText}
                     ></TextInput>
                 </View>
@@ -36,9 +34,7 @@ const RedBorderBox = (props) => {
                     <TextInput style={styles.InputReceiver}
                         placeholder='받는 친구의 이름을 입력해주세요.'
                         maxLength={15}
-                        // eslint-disable-next-line react/prop-types
                         value={props.value}
-                        // eslint-disable-next-line react/prop-types
                         onChangeText={props.onChangeText}
                     ></TextInput>
                 </View>
@@ -52,9 +48,7 @@ const RedBorderBox = (props) => {
                         numberOfLines={10}
                         maxLength={100}
                         textAlignVertical='top'
-                        // eslint-disable-next-line react/prop-types
                         value={props.value}
-                        // eslint-disable-next-line react/prop-types
                         onChangeText={props.onChangeText}
                     ></TextInput>
                 </View>
@@ -72,7 +66,6 @@ const RedBorderBox = (props) => {
 
 };
 RedBorderBox.propTypes = {
-    //type: img or TextField or TextArea
     type: PropTypes.string,
     value: PropTypes.string,
     onChangeText: PropTypes.func,

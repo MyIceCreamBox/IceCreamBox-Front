@@ -58,47 +58,7 @@ const ConfigLetterScreen = ({ route }) => {
   const navigation = useNavigation();
   // eslint-disable-next-line react/prop-types
   const { receiverName, writer, letter, iceType } = route.params;
-  // function sendLetter() {
-  //   AsyncStorage.getItem('token')
-  //     .then((token) => {
-  //       if (token) {
-  //         axios({
-  //           method: 'post',
-  //           url: 'http://ec2-13-209-138-31.ap-northeast-2.compute.amazonaws.com:8080/gifts/send',
-  //           headers: {
-  //             Authorization: `${token}`, // 헤더에 토큰을 추가
-  //           },
-  //           data: {
-  //             "iceCreamName": icetypeToIcename(iceType),
-  //             "senderNickname": writer,
-  //             "receiverNickname": receiverName,
-  //             "message": letter,
-  //           }
-  //         })
-  //           .then(function (resp) {
-  //             if (resp.data.description == null) {
-  //               console.log('보내기 성공' + resp.data.data)
-  //               isSuccessed=true;
 
-  //             } else {
-  //               console.log(`아이스크림:${iceType}, 보내는사람:${writer} 받는사람:${receiverName}`)
-  //               console.log('보내기 실패')
-  //               isSuccessed=false;
-  //             }
-  //             console.log(resp)
-  //           })
-  //           .catch(function (err) {
-  //             console.log(err.response);
-  //           });
-  //       } else {
-  //         console.log('토큰이 없습니다.');
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.response);
-  //       throw error;
-  //     });
-  // }
   async function sendLetter() {
     isSuccessed = true;
     await AsyncStorage.getItem('token')
@@ -174,17 +134,6 @@ const ConfigLetterScreen = ({ route }) => {
       </View>
 
       <View style={styles.containerBottom}>
-
-        {/* <NextBtn title='확인' type='goToFinishSend' onPress={() => {
-          console.log(isSuccessed)
-          if (isSuccessed) {
-            sendLetter()
-            navigation.navigate('FinshSendPage', { receiverName: receiverName, iceType: iceType, })
-          } else {
-            Alert.alert('받는 친구를 찾을 수 없어요.')
-          }
-        }}></NextBtn> */}
-
         <NextBtn title='확인' type='goToFinishSend' onPress={async () => {
           await sendLetter();
           if (isSuccessed) {

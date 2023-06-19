@@ -1,11 +1,4 @@
-import {
-  View,
-  Image,
-  Modal,
-  TouchableOpacity,
-  StyleSheet,
-  Text,
-} from 'react-native';
+import { View, Image, Modal, TouchableOpacity, StyleSheet, Text,} from 'react-native';
 import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useState, useEffect } from 'react';
@@ -31,7 +24,6 @@ const OBar = (item) => {
           },
         })
           .then(function (res) {
-            // console.log(res.data.data.isAfter);
             setPossible(res.data.data.isAfter);
           })
           .catch(function (error) {

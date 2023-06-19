@@ -6,6 +6,7 @@ import Explanation from '../components/Explanation';
 import NextBtn from '../components/NextBtn';
 import RedBorderBox from '../components/RedBorderBox'; import { useState } from 'react';
 
+
 // eslint-disable-next-line react/prop-types
 const WriteLetterScreen = ({ route }) => {
   const navigation = useNavigation();

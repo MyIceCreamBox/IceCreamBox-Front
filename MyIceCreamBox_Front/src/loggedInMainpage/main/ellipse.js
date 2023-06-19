@@ -79,7 +79,6 @@ const styles = StyleSheet.create({
     width: width * 0.103,
     height: height * 0.047,
     aspectRatio: 1 / 1,
-    // resizeMode: 'contain',
     position: 'absolute',
     marginTop: height * 0.78 * 0.5,
     right: width * 0.13,

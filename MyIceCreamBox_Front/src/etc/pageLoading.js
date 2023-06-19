@@ -1,13 +1,6 @@
 import ErrorBackground from './page404_background';
 import { useEffect, useState } from 'react';
-import {
-  useWindowDimensions,
-  StyleSheet,
-  View,
-  Image,
-  Text,
-} from 'react-native';
-// import LoadingAni from '../component/LoadingAni';
+import { useWindowDimensions, StyleSheet, View, Image, Text,} from 'react-native';
 
 const LoadingPage = () => {
   const [imageNumber, setImageNumber] = useState(0);
@@ -38,7 +31,6 @@ const LoadingPage = () => {
         source={animationImages[imageNumber]}
         key={imageNumber}
       />
-      {/* <LoadingAni style={styles.ribbon} /> */}
       <Text style={styles.text}>LOADING ...</Text>
     </View>
   );
@@ -63,7 +55,6 @@ const styles = StyleSheet.create({
     marginTop: '35%',
     fontSize: 28,
     fontWeight: 700,
-    /* gray */
     color: '#686868',
   },
 });

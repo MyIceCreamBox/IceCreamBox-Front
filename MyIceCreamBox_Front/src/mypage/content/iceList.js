@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   iceList: {
-    // margin: width * 0.077,
     margin: width * 0.1,
     justifyContent: 'space-evenly',
   },

@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import * as Font from "expo-font";
 import { StyleSheet, View, Text, Pressable } from 'react-native';
 
@@ -103,9 +103,5 @@ const styles = StyleSheet.create({
   text:{
     fontFamily:'locus_sangsang'
   }
-  // btnPressed: {
-  //   backgroundColor: '#F3D048',
-  // },
-
 });
 export default NextBtn;
