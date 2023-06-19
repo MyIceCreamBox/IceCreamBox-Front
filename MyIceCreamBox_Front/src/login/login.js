@@ -50,7 +50,6 @@ const Login = () => {
         },
       })
         .then(function (resp) {
-         // console.log('Token'+resp.data.data.accessToken);
           if (resp.data.data !== null && resp.data.data != '') {
             console.log('로그인 성공');
 
@@ -64,8 +63,6 @@ const Login = () => {
               .catch((error) => {
                 console.log('토큰 저장 실패', error);
               });
-
-            // navigation.navigate('LoggedInMainpage');
           } else {
             Alert.alert('로그인 실패', resp.data.description);
           }

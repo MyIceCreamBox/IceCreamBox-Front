@@ -1,11 +1,10 @@
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { useState, useCallback, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { Keyboard, Alert, StyleSheet, View } from 'react-native';
+import {Alert, StyleSheet, View } from 'react-native';
 
 import BackBtn from '../components/BackBtn';
 import Title from '../components/Title';
-import Explanation from '../components/Explanation';
 import NextBtn from '../components/NextBtn';
 import Icecream from '../components/Icecream';
 import RedBorderBox from '../components/RedBorderBox';
@@ -50,7 +49,6 @@ const SelectIcecream = () => {
           value={receiverName}
           onChangeText={(text) => setReceiverName(text)}
         />
-        {/* <Explanation nickname={receiverName} contents='에게 어떤 아이스크림을 보낼까?'></Explanation> */}
       </View>
       <View style={styles.containerMid}>
         <View style={styles.containerMidInner}>

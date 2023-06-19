@@ -41,7 +41,6 @@ const MainPage = () => {
             style={{width: screenWidth,  height: screenHeight, resizeMode: 'stretch'}}
             source={require('icecream_box/assets/mainpage/main_frame.png')}>
           </Image>
-
                   {/* 모달 */}
           <Modal
             animationType='none'
@@ -78,9 +77,6 @@ const MainPage = () => {
                 지금 바로 친구들에게{'\n'} {'\n'}
                 무더운 여름에 힘이 될 응원을 보내볼까요? 
               </Text>   
-                {/* </ImageBackground>   
-              </View> */}
-              
               <TouchableOpacity
                     onPress={
                         ()=>{setModalVisible(!modalVisible)}
@@ -88,7 +84,6 @@ const MainPage = () => {
                     style={styles.btnClose}>
                     <Image source={require('icecream_box/assets/mainpage/main_back.png')}></Image>
               </TouchableOpacity>
-
             </View>
           </Modal>
 

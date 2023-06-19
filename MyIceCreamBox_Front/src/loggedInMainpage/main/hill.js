@@ -14,7 +14,6 @@ const styles = StyleSheet.create({
     resizeMode: 'stretch',
     position: 'absolute',
     right: -20,
-    // bottom: 0,
     marginTop: height * 0.78 * 0.58,
   },
 });

@@ -2,7 +2,6 @@ import { Text, Pressable, StyleSheet, View, Alert } from 'react-native';
 import { width, height } from '../../global/dimension';
 import { useState, useEffect } from 'react';
 import * as Font from 'expo-font';
-// import Toast from 'react-native-toast-message';
 import Toast from 'react-native-root-toast';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
